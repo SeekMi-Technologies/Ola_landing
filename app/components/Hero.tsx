@@ -50,20 +50,14 @@ export default function Hero() {
       </div>
 
       {/* Giant ΔOLA wordmark — bottom-left, Palantir-style */}
-      <div className="absolute bottom-8 left-6 md:left-10 flex items-end leading-none select-none pointer-events-none">
-        <span
-          className="font-mono-tight font-medium -tracking-[0.04em]"
-          style={{ fontSize: "clamp(70px, 13vw, 200px)" }}
-          aria-hidden
-        >
-          Δ
-        </span>
-        <span
-          className="font-medium tracking-tightest -ml-1 md:-ml-3"
-          style={{ fontSize: "clamp(70px, 13vw, 200px)" }}
-        >
-          OLA
-        </span>
+      <div className="absolute bottom-8 left-6 md:left-10 leading-none select-none pointer-events-none">
+        <img
+          src="/ola-logo-white.png"
+          alt="OLA"
+          className="w-auto block"
+          style={{ height: "clamp(56px, 11vw, 170px)" }}
+          draggable={false}
+        />
       </div>
 
       {/* Bottom-right mono labels (Palantir-style corner copy) */}

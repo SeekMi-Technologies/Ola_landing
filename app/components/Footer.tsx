@@ -87,9 +87,13 @@ export default function Footer() {
 
       {/* ─── FOOTER: single compact line ─── */}
       <section className="relative border-t border-white/10 px-6 md:px-10 py-6 flex items-center justify-between gap-4 text-[11px] font-mono-tight uppercase tracking-[0.18em] text-white/50">
-        <a href="#" className="inline-flex items-center gap-1.5 text-white/80 hover:text-white transition normal-case font-semibold tracking-tight text-[14px]">
-          <span className="font-mono-tight text-[16px] leading-none">Δ</span>
-          <span>OLA</span>
+        <a href="#" className="inline-flex items-center opacity-80 hover:opacity-100 transition" aria-label="OLA home">
+          <img
+            src="/ola-logo-white.png"
+            alt="OLA"
+            className="h-[18px] w-auto select-none"
+            draggable={false}
+          />
         </a>
         <div className="flex items-center gap-4">
           <a href="mailto:ola@olatech.ai" className="hover:text-white transition normal-case tracking-normal">

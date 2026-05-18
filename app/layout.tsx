@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "OLA — Lead-to-Quote, in Minutes",
   description:
     "Dedicated AI for B2B sales. OLA turns email, CRM, and product context into quotes in minutes.",
+  icons: {
+    icon: "/ola-mark.jpg",
+    apple: "/ola-mark.jpg",
+  },
 };
 
 export default function RootLayout({
