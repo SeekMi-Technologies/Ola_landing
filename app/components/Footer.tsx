@@ -23,7 +23,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer id="get-started" className="relative bg-ink text-white">
+    <footer id="get-started" className="relative z-10 bg-ink text-white">
       {/* ─── CTA ─── */}
       <section
         ref={ctaRef}
@@ -89,7 +89,7 @@ export default function Footer() {
       <section className="relative border-t border-white/10 px-6 md:px-10 py-6 flex items-center justify-between gap-4 text-[11px] font-mono-tight uppercase tracking-[0.18em] text-white/50">
         <a href="#" className="inline-flex items-center opacity-80 hover:opacity-100 transition" aria-label="OLA home">
           <img
-            src="/ola-logo-white.png"
+            src="/ola-logo.svg"
             alt="OLA"
             className="h-[18px] w-auto select-none"
             draggable={false}

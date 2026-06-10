@@ -79,6 +79,7 @@ export default function StagesScroll() {
   return (
     <section
       ref={sectionRef}
+      data-nav-light="true"
       className="relative bg-paper text-ink"
       style={{ height: `${stages.length * STAGE_VH + TRAILING_VH}vh` }}
     >

@@ -52,7 +52,7 @@ export default function Hero() {
       {/* Giant ΔOLA wordmark — bottom-left, Palantir-style */}
       <div className="absolute bottom-8 left-6 md:left-10 leading-none select-none pointer-events-none">
         <img
-          src="/ola-logo-white.png"
+          src="/ola-logo.svg"
           alt="OLA"
           className="w-auto block"
           style={{ height: "clamp(56px, 11vw, 170px)" }}

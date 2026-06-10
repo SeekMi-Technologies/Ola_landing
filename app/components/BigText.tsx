@@ -64,6 +64,7 @@ export default function BigText() {
   return (
     <section
       ref={sectionRef}
+      data-bigtext
       className="relative"
       style={{ height: "260vh", backgroundColor: bg, transition: "background-color 80ms linear" }}
     >
