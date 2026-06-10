@@ -49,10 +49,10 @@ export default function Nav() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 pt-4 pointer-events-none">
       <div
-        className={`pointer-events-auto flex items-center justify-between px-5 md:px-8 py-3 rounded-xl border shadow-[0_14px_38px_rgba(0,0,0,0.12)] backdrop-blur-md backdrop-saturate-125 transition-colors duration-300 ${
+        className={`pointer-events-auto flex items-center justify-between px-5 md:px-8 py-3 rounded-xl border shadow-[0_14px_38px_rgba(0,0,0,0.12)] backdrop-blur-[2px] backdrop-saturate-125 transition-colors duration-300 ${
           isLight
-            ? "bg-white/[0.18] border-black/[0.06] text-black"
-            : "bg-white/[0.06] border-white/[0.12] text-white"
+            ? "bg-white/[0.05] border-black/[0.06] text-black"
+            : "bg-white/[0.01] border-white/[0.12] text-white"
         }`}
       >
         <a href="#" className="flex items-center" aria-label="OLA home">
