@@ -2,32 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const DARK = "#0A0A0B";
-const PAPER = "#F4F4F2";
-
 export default function Nav() {
   const [isLight, setIsLight] = useState(false);
-  const [bg, setBg] = useState(DARK);
-  const prev = useRef({ light: false, bg: DARK });
+  const prev = useRef(false);
 
   useEffect(() => {
     const navBottom = 72;
 
     const check = () => {
       let light = false;
-      let color = DARK;
-
       // Solid light section (StagesScroll)
       document.querySelectorAll('[data-nav-light="true"]').forEach((el) => {
         const r = el.getBoundingClientRect();
         if (r.top <= navBottom && r.bottom > navBottom) {
           light = true;
-          color = PAPER;
         }
       });
 
-      // BigText: bg interpolates dark→light over the first 25% of its scroll.
-      // Mirror that exact color so the nav fill never mismatches the gradient.
+      // BigText flips from dark to light during its scroll; keep the glass controls readable.
       const bigText = document.querySelector("[data-bigtext]") as HTMLElement | null;
       if (bigText) {
         const r = bigText.getBoundingClientRect();
@@ -35,16 +27,13 @@ export default function Nav() {
           const total = bigText.offsetHeight - window.innerHeight;
           const scrolled = Math.min(Math.max(-r.top, 0), total);
           const bgP = Math.min((total > 0 ? scrolled / total : 0) / 0.25, 1);
-          const ch = (a: number, b: number) => Math.round(a + (b - a) * bgP);
-          color = `rgb(${ch(10, 244)}, ${ch(10, 244)}, ${ch(11, 242)})`;
           light = bgP > 0.5; // matches BigText's own text-color flip
         }
       }
 
-      if (light !== prev.current.light || color !== prev.current.bg) {
-        prev.current = { light, bg: color };
+      if (light !== prev.current) {
+        prev.current = light;
         setIsLight(light);
-        setBg(color);
       }
     };
 
@@ -58,15 +47,12 @@ export default function Nav() {
   }, []);
 
   return (
-    <nav
-      className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 pt-4"
-      style={{ backgroundColor: bg }}
-    >
+    <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 pt-4 pointer-events-none">
       <div
-        className={`flex items-center justify-between px-5 md:px-8 py-3 rounded-xl backdrop-blur-xl border transition-colors duration-300 ${
+        className={`pointer-events-auto flex items-center justify-between px-5 md:px-8 py-3 rounded-xl border shadow-[0_14px_38px_rgba(0,0,0,0.12)] backdrop-blur-[2px] backdrop-saturate-125 transition-colors duration-300 ${
           isLight
-            ? "bg-black/[0.04] border-transparent text-black"
-            : "bg-white/[0.06] border-white/[0.12] text-white"
+            ? "bg-white/[0.05] border-black/[0.06] text-black"
+            : "bg-white/[0.01] border-white/[0.12] text-white"
         }`}
       >
         <a href="#" className="flex items-center" aria-label="OLA home">
