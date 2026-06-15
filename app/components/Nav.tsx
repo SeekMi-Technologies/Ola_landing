@@ -67,7 +67,7 @@ export default function Nav() {
         </a>
         <div className="flex items-center gap-3">
           <a
-            href="https://pipipig-yz.github.io/ola_user_guide/en/intro-en"
+            href="https://pipipig-yz.github.io/ola_user_guide_v4/en/intro-en"
             target="_blank"
             rel="noopener noreferrer"
             className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${
