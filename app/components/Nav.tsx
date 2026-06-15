@@ -65,18 +65,32 @@ export default function Nav() {
             draggable={false}
           />
         </a>
-        <a
-          href="https://app.olatech.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${
-            isLight
-              ? "bg-black text-white hover:bg-black/80"
-              : "bg-white text-black hover:bg-white/90"
-          }`}
-        >
-          Get Started
-        </a>
+        <div className="flex items-center gap-3">
+          <a
+            href="https://pipipig-yz.github.io/ola_user_guide/en/intro-en"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${
+              isLight
+                ? "bg-black text-white hover:bg-black/80"
+                : "bg-white text-black hover:bg-white/90"
+            }`}
+          >
+            Docs
+          </a>
+          <a
+            href="https://app.olatech.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${
+              isLight
+                ? "bg-black text-white hover:bg-black/80"
+                : "bg-white text-black hover:bg-white/90"
+            }`}
+          >
+            Get Started
+          </a>
+        </div>
       </div>
     </nav>
   );
