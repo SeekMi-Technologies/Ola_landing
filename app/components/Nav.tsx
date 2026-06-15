@@ -66,7 +66,7 @@ export default function Nav() {
           />
         </a>
         <div className="flex items-center gap-3">
-          <a
+          {/* <a
             href="https://pipipig-yz.github.io/ola_user_guide_v4/en/intro-en"
             target="_blank"
             rel="noopener noreferrer"
@@ -77,7 +77,7 @@ export default function Nav() {
             }`}
           >
             Docs
-          </a>
+          </a> */}
           <a
             href="https://app.olatech.ai"
             target="_blank"
