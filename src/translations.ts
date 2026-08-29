@@ -138,9 +138,17 @@ export const ENGLISH: Record<string, string> = {
   '这周还差 10 个目标客户': 'Still ten target accounts short this week.',
   '帮我做获客调研，找正在用 Langfuse 的 AI agent 公司。先出方案，我确认再动手。':
     'Run lead research for me — AI agent companies using Langfuse. Give me the plan first, I’ll confirm before you start.',
-  '按你确认的方案扫了 Langfuse 公开客户和今年的融资新闻。':
-    'Ran the plan you approved across Langfuse’s public customers and this year’s funding news.',
+  '扫了 Langfuse 公开客户和今年的融资新闻。':
+    'Scanned Langfuse’s public customers and this year’s funding news.',
   'GitHub 那条按你说的去掉了。': 'Dropped the GitHub angle as you asked.',
+  '动手之前先说方案。打算扫三个来源：':
+    'The plan before I start. Three sources:',
+  '扫描来源': 'Sources to scan',
+  'Langfuse 官网公开的客户名单': 'Langfuse’s published customer list',
+  '今年的融资新闻里提到 Langfuse 的公司': 'Companies naming Langfuse in this year’s funding news',
+  'GitHub 上引用了 Langfuse 的仓库': 'GitHub repos that depend on Langfuse',
+  '同行和研究项目会剔掉，剩下的写进「获客线索表」。要删要加你说一声。':
+    'Competitors and research projects get filtered out; the rest goes to the Leads table. Say if you want a source dropped or added.',
   '剔除同行和研究项目后写进「获客线索表」。':
     'Filtered out competitors and research projects, wrote the rest to the Leads table.',
   '本周扫到 14 家，剔掉 9 家同行和研究项目。下面是标了高优先的 5 家。':

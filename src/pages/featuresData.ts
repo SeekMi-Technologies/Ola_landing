@@ -98,13 +98,17 @@ export const MANAGE = {
   toolsLead: '连接后，Ola 就会用这些工具',
   /* Full-colour marks only, so the strip needs no light/dark pair. */
   tools: [
+    /* logoDark on the monochrome marks only. GitHub and Linear are pure
+       black and Notion is more than half black pixels, so all three vanish
+       on the dark theme's near-black card; the rest are full-colour and
+       read on either ground. */
     { name: '飞书', logo: '/logos/lark.webp' },
     { name: 'Slack', logo: '/logos/slack.webp' },
     { name: 'Microsoft Teams', logo: '/logos/microsoft-teams.webp' },
     { name: 'WhatsApp', logo: '/logos/whatsapp.webp' },
-    { name: 'GitHub', logo: '/logos/github.webp' },
-    { name: 'Linear', logo: '/logos/linear.webp' },
-    { name: 'Notion', logo: '/logos/notion.webp' },
+    { name: 'GitHub', logo: '/logos/github.webp', logoDark: '/logos/github-dark.webp' },
+    { name: 'Linear', logo: '/logos/linear.webp', logoDark: '/logos/linear-dark.webp' },
+    { name: 'Notion', logo: '/logos/notion.webp', logoDark: '/logos/notion-dark.webp' },
     { name: 'Google Drive', logo: '/logos/google-drive.webp' },
     { name: 'Gmail', logo: '/logos/gmail.webp' },
     { name: 'Figma', logo: '/logos/figma.webp' },
