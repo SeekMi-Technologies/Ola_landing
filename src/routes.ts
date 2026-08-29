@@ -14,6 +14,7 @@
  * `try_files $uri $uri/index.html /404.html`.
  */
 export type Route = 'home' | 'integrations' | 'pricing' | 'product' | 'login' | 'contact' | 'notFound'
+export type SiteLanguage = 'en' | 'zh-CN'
 
 const PATHS: Record<string, Route> = {
   '/integrations': 'integrations',
@@ -26,10 +27,32 @@ const PATHS: Record<string, Route> = {
 }
 
 export function routeFor(pathname: string): Route {
-  const path = pathname.replace(/\/+$/, '')
+  const path = pathWithoutLanguage(pathname).replace(/\/+$/, '')
   if (path === '') return 'home'
   /* Anything unknown is a 404, not the home page: falling back to home meant
      a mistyped or retired URL rendered the home page at that address, and
      search engines indexed each of them as a duplicate of it. */
   return PATHS[path] ?? 'notFound'
+}
+
+export function languageForPath(pathname: string): SiteLanguage {
+  return pathname === '/zh' || pathname.startsWith('/zh/') ? 'zh-CN' : 'en'
+}
+
+export function pathWithoutLanguage(pathname: string) {
+  const path = pathname === '/zh' ? '/' : pathname.replace(/^\/zh(?=\/)/, '')
+  return path || '/'
+}
+
+/** Keep query strings and hashes while moving between the two static trees. */
+export function pathForLanguage(path: string, language: SiteLanguage) {
+  if (!path.startsWith('/') || path.startsWith('//')) return path
+  const splitAt = path.search(/[?#]/)
+  const pathname = splitAt === -1 ? path : path.slice(0, splitAt)
+  const suffix = splitAt === -1 ? '' : path.slice(splitAt)
+  const base = pathWithoutLanguage(pathname)
+  const localized = language === 'zh-CN'
+    ? base === '/' ? '/zh' : `/zh${base}`
+    : base
+  return `${localized}${suffix}`
 }

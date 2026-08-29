@@ -6,5 +6,6 @@
 User-agent: *
 Allow: /
 Disallow: /login
+Disallow: /zh/login
 
 Sitemap: https://olatech.ai/sitemap.xml

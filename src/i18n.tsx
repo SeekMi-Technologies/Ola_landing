@@ -1,11 +1,12 @@
 import {
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
   type ReactNode,
 } from 'react'
 import { ENGLISH } from './translations'
 import { I18nContext, type Language } from './i18nContext'
+import { pathForLanguage } from './routes'
 
 const STORAGE_KEY = 'ola-language'
 const normalizedEnglish = new Map(
@@ -14,7 +15,7 @@ const normalizedEnglish = new Map(
 const originalText = new WeakMap<Text, string>()
 const internalTextUpdates = new WeakMap<Text, string>()
 const originalAttributes = new WeakMap<Element, Map<string, string>>()
-const translatedAttributes = ['aria-label', 'placeholder', 'title'] as const
+const translatedAttributes = ['aria-label', 'placeholder', 'title', 'alt'] as const
 
 function normalize(value: string) {
   return value.replace(/\s+/g, ' ').trim()
@@ -52,6 +53,49 @@ function translate(value: string) {
   return value
 }
 
+function escapeText(value: string) {
+  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+function escapeAttribute(value: string) {
+  return escapeText(value).replace(/"/g, '&quot;')
+}
+
+/**
+ * Turns the Chinese-source markup emitted by React SSR into the English
+ * version that is written to dist. Keeping this transformation beside the
+ * browser translator means static HTML and the interactive site use the
+ * same dictionary and runtime-value rules.
+ */
+export function localizeMarkup(markup: string, language: Language) {
+  const translatedText = language === 'en'
+    ? markup.replace(/>([^<]+)</g, (match, value: string) => {
+        const translated = translate(value)
+        return translated === value ? match : `>${escapeText(translated)}<`
+      })
+    : markup
+
+  const translatedAttributes = language === 'en'
+    ? translatedText.replace(
+        /\s(aria-label|placeholder|title|alt)="([^"]*)"/g,
+        (match, attribute: string, value: string) => {
+          const translated = translate(value)
+          return translated === value
+            ? match
+            : ` ${attribute}="${escapeAttribute(translated)}"`
+        },
+      )
+    : translatedText
+
+  return translatedAttributes.replace(
+    /\shref="(\/[^"]*)"/g,
+    (match, href: string) => {
+      const localized = pathForLanguage(href, language)
+      return localized === href ? match : ` href="${localized}"`
+    },
+  )
+}
+
 function applyTextNode(node: Text, language: Language) {
   if (node.parentElement?.closest('[data-i18n-ignore]')) return
   if (!originalText.has(node)) originalText.set(node, node.nodeValue ?? '')
@@ -77,6 +121,16 @@ function applyElementAttributes(element: Element, language: Language) {
     const source = stored.get(attribute) ?? current
     const nextValue = language === 'en' ? translate(source) : source
     if (current !== nextValue) element.setAttribute(attribute, nextValue)
+  }
+
+  if (element.tagName === 'A') {
+    const current = element.getAttribute('href')
+    if (current?.startsWith('/') && !current.startsWith('//')) {
+      if (!stored.has('href')) stored.set('href', current)
+      const source = stored.get('href') ?? current
+      const nextValue = pathForLanguage(source, language)
+      if (current !== nextValue) element.setAttribute('href', nextValue)
+    }
   }
 }
 
@@ -106,20 +160,19 @@ function applyTree(root: Node, language: Language) {
   }
 }
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  /* Always Chinese for the first render, then the stored choice. Reading
-     localStorage in the initialiser would make the client's first render
-     differ from the prerendered HTML — which is Chinese, the source
-     language — and React would throw the hydrated tree away. An English
-     reader sees one frame of Chinese instead; the alternative is no
-     prerendered HTML at all. */
-  const [language, setLanguage] = useState<Language>('zh-CN')
+export function I18nProvider({
+  children,
+  defaultLanguage = 'en',
+}: {
+  children: ReactNode
+  defaultLanguage?: Language
+}) {
+  /* English is the public/static default. Returning visitors who explicitly
+     chose Chinese still begin in Chinese because the client mounts rather
+     than hydrates the translated static markup. */
+  const [language, setLanguage] = useState<Language>(defaultLanguage)
 
-  useEffect(() => {
-    if (window.localStorage.getItem(STORAGE_KEY) === 'en') setLanguage('en')
-  }, [])
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, language)
     document.documentElement.lang = language
     /* The tab title is set by <Seo>, which knows the route as well as the

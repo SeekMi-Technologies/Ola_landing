@@ -3,6 +3,7 @@ import { useI18n, type Language } from '../i18nContext'
 import { IconCheck } from './icons'
 import OlaLogo from './OlaLogo'
 import { APPLY_URL, CHANGELOG_URL, DOCS_URL } from '../links'
+import { pathForLanguage } from '../routes'
 
 /* Three entries, mapped to the dedicated pages. The sections dropped from
    the bar — how-it-works, workspace, security, faq — still render on the
@@ -46,7 +47,7 @@ function GlobeIcon() {
 
 function LanguageMenu() {
   const [open, setOpen] = useState(false)
-  const { language, setLanguage } = useI18n()
+  const { language } = useI18n()
   const rootRef = useRef<HTMLDivElement>(null)
   const currentLabel = LANGUAGES.find((item) => item.id === language)?.label
 
@@ -68,8 +69,18 @@ function LanguageMenu() {
   }, [])
 
   function selectLanguage(nextLanguage: Language) {
-    setLanguage(nextLanguage)
     setOpen(false)
+    try {
+      window.localStorage.setItem('ola-language', nextLanguage)
+    } catch {
+      // The locale URL remains authoritative when storage is unavailable.
+    }
+    window.location.assign(
+      pathForLanguage(
+        `${window.location.pathname}${window.location.search}${window.location.hash}`,
+        nextLanguage,
+      ),
+    )
   }
 
   return (

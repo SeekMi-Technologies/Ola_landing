@@ -11,7 +11,7 @@
  * (the same components compiled for Node). For each route it renders the
  * page to a string, injects it into the built index.html along with that
  * route's own <title> and meta tags, and writes dist/<route>/index.html.
- * The client then hydrates that markup instead of replacing it.
+ * The client keeps it visible until JavaScript mounts the interactive app.
  */
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
@@ -37,6 +37,7 @@ const shell = template
   .replace(/\n\s*<meta\s+name="robots"[\s\S]*?\/>/, '')
   .replace(/\n\s*<meta\s+property="og:[\s\S]*?\/>/g, '')
   .replace(/\n\s*<meta\s+name="twitter:[\s\S]*?\/>/g, '')
+  .replace(/\n\s*<link\s+rel="alternate"[\s\S]*?\/>/g, '')
 
 if (!shell.includes('<!--head-->')) {
   throw new Error('prerender: could not find the <title> to replace in index.html')
@@ -44,6 +45,7 @@ if (!shell.includes('<!--head-->')) {
 
 async function writePage(path, page) {
   const html = shell
+    .replace('<html lang="en">', `<html lang="${page.language}">`)
     .replace('<!--head-->', `<title>${page.title}</title>\n    ${page.tags}`)
     .replace('<div id="root"></div>', `<div id="root">${page.html}</div>`)
 

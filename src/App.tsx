@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { routeFor } from './routes'
+import { languageForPath, pathForLanguage, pathWithoutLanguage, routeFor } from './routes'
 import Seo from './components/Seo'
 import IntegrationsPage from './pages/IntegrationsPage'
 import PricingPage from './pages/PricingPage'
@@ -27,11 +27,11 @@ export default function App({ initialPath }: { initialPath?: string } = {}) {
   )
 
   useEffect(() => {
-    if (window.location.pathname.replace(/\/+$/, '') === '/features') {
+    if (pathWithoutLanguage(window.location.pathname).replace(/\/+$/, '') === '/features') {
       window.history.replaceState(
         null,
         '',
-        `/product${window.location.search}${window.location.hash}`,
+        `${pathForLanguage('/product', languageForPath(window.location.pathname))}${window.location.search}${window.location.hash}`,
       )
     }
 
