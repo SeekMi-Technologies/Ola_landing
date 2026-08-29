@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Ola — Your New Favorite Hire</title>
+  <desc id="desc">Ola gets work done in the tools your team already uses.</desc>
+
+  <defs>
+    <clipPath id="panel">
+      <rect x="74" y="150" width="1052" height="352" rx="32"/>
+    </clipPath>
+    <pattern id="grid" width="88" height="88" patternUnits="userSpaceOnUse" x="74" y="150">
+      <path d="M88 0H0v88" fill="none" stroke="#fff" stroke-opacity=".10" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#f6f4f2"/>
+  <path d="M0 0h1200v92H0z" fill="#fff"/>
+  <path d="M0 92h1200v1H0z" fill="#d5d3d2"/>
+
+  <!-- the wordmark itself, not letter-spaced Arial -->
+  <g transform="translate(74 26) scale(0.4224)" fill="#302c2c" fill-rule="evenodd">
+    <path d="M47.35,0C21.2,0,0,21.2,0,47.35s21.2,47.35,47.35,47.35,47.35-21.2,47.35-47.35S73.5,0,47.35,0ZM47.35,80.13c-18.1,0-32.78-14.68-32.78-32.78S29.24,14.57,47.35,14.57s32.78,14.68,32.78,32.78-14.68,32.78-32.78,32.78Z"/>
+    <polygon points="159.64 92.87 159.64 78.3 128.69 78.3 128.69 1.82 114.12 1.82 114.12 92.87 159.64 92.87"/>
+    <path d="M229.51,1.82h-18.94l-31.5,91.05h15.42l7.56-21.85h35.99l7.56,21.85h15.42L229.51,1.82ZM207.08,56.45l12.85-37.14h.21l12.85,37.14h-25.91Z"/>
+  </g>
+
+  <rect x="74" y="150" width="1052" height="352" rx="32" fill="#175134"/>
+  <g clip-path="url(#panel)">
+    <rect x="74" y="150" width="1052" height="352" fill="url(#grid)"/>
+    <!-- the A mark from OLA_Favicon.svg, oversized and barely there, holding
+         the empty right half. The favicon sets it on a filled circle; only
+         the mark itself is used here. -->
+    <g transform="translate(634 91) scale(1.7)" fill="#fff" fill-opacity=".07" fill-rule="evenodd">
+      <path d="M173.54,63.49l76.97,133.31c8.95,15.51,4.48,23.26-13.43,23.26H83.14c-17.9,0-22.38-7.75-13.43-23.26L146.68,63.49c8.95-15.51,17.9-15.51,26.86,0ZM167.26,108.66l40.98,70.99c4.77,8.26,2.39,12.38-7.15,12.38h-81.97c-9.53,0-11.91-4.13-7.15-12.38l40.98-70.99c4.76-8.26,9.53-8.26,14.3,0Z"/>
+    </g>
+  </g>
+
+  <!-- Two lines: "Your New" / "Favorite [Hire]". Measured, not guessed —
+       "Favorite" is 342 wide at 92px, so the box starts at 498 and ends at
+       710, clear of the A mark at 745. -->
+  <text x="130" y="292" fill="#fff" font-family="Helvetica, Arial, sans-serif" font-size="92" font-weight="700" letter-spacing="-2">Your New</text>
+  <text x="130" y="416" fill="#fff" font-family="Helvetica, Arial, sans-serif" font-size="92" font-weight="700" letter-spacing="-2">Favorite</text>
+  <rect x="498" y="329" width="212" height="115" rx="18" fill="#fff"/>
+  <text x="528" y="416" fill="#175134" font-family="Helvetica, Arial, sans-serif" font-size="82" font-weight="700" letter-spacing="-2">Hire</text>
+
+  <text x="130" y="566" fill="#706e6d" font-family="Helvetica, Arial, sans-serif" font-size="28" letter-spacing="-0.3">Gets work done where your team already works.</text>
+</svg>
