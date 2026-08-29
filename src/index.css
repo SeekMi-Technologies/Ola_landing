@@ -143,6 +143,8 @@
     --color-signal: #4e9b6d;
     --color-danger: #e0716a;
     --color-ok: #6fb35f;
+    /* #3a5a80 measures 2.1:1 on the dark card the chat window now uses. */
+    --color-fs-link: #8fb3dd;
 
     --color-clay: #c56340;
     --color-clay-tint: #3a2a22;

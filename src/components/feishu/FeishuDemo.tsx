@@ -91,8 +91,11 @@ function Avatar({
   return (
     <span
       className="flex shrink-0 items-center justify-center rounded-lg"
+      /* Mixed with the card surface rather than a fixed #fff, and the
+         glyph mixed toward the ink: on the dark skin an 18%-of-white tint
+         under a #4a6b8a glyph was a pale chip with an invisible mark. */
       style={{
-        background: `color-mix(in srgb, ${person.tone} 18%, #fff)`,
+        background: `color-mix(in srgb, ${person.tone} 22%, var(--color-paper))`,
         width: size,
         height: size,
       }}
@@ -100,7 +103,7 @@ function Avatar({
     >
       <svg
         viewBox="0 0 24 24"
-        fill={person.tone}
+        fill={`color-mix(in srgb, ${person.tone} 62%, var(--color-ink))`}
         style={{ width: size * 0.52, height: size * 0.52 }}
       >
         <path d={GLYPHS[person.glyph]} fillRule="evenodd" />
@@ -153,7 +156,7 @@ function Message({
 function Composer({ group }: { group: string }) {
   return (
     <div className="border-t border-mist px-4 py-3 sm:px-6">
-      <div className="flex items-center gap-2 rounded-[10px] border border-mist bg-white px-3 py-2.5">
+      <div className="flex items-center gap-2 rounded-[10px] border border-mist bg-linen px-3 py-2.5">
         <span className="flex-1 truncate text-[13px] text-charcoal">
           {`发消息到「${group}」`}
         </span>
@@ -540,7 +543,13 @@ export default function FeishuDemo() {
           <BlurbCard blurb={group.blurb} />
         </div>
 
-        {/* Hidden below sm. The mock-up is a desktop chat client — a rail,
+        {/* No .theme-light pin any more: the window follows the page theme,
+            which is what a real client does — it was the single biggest
+            white block left on the dark home page. Everything inside was
+            already on tokens; only the avatar tint and the composer field
+            were hardcoded, and both now mix with --color-paper.
+
+            Hidden below sm. The mock-up is a desktop chat client — a rail,
             a group header, a thread and a composer — squeezed into 327px it
             was 420px of shrunken chrome that read as a screenshot rather
             than as software, and it put the prompt and the explanation two
@@ -555,7 +564,7 @@ export default function FeishuDemo() {
             `flex-1` only from md. Below that the parent is a column, where
             `flex: 1 1 0%` takes the main axis off `height` and let the panel
             grow — measured 754px against the 500 it is meant to be. */}
-        <div className="theme-light hidden h-[420px] w-full min-w-0 overflow-hidden rounded-[var(--radius-card)] bg-paper shadow-[0_20px_50px_-24px_rgba(24,23,23,0.45)] sm:flex sm:h-[500px] md:w-auto md:flex-1">
+        <div className="hidden h-[420px] w-full min-w-0 overflow-hidden rounded-[var(--radius-card)] bg-paper shadow-[0_20px_50px_-24px_rgba(24,23,23,0.45)] sm:flex sm:h-[500px] md:w-auto md:flex-1">
           <Rail />
 
           <div className="flex min-w-0 flex-1 flex-col">
