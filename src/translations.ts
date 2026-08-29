@@ -22,6 +22,7 @@ export const ENGLISH: Record<string, string> = {
   'Ola 都能帮你做什么': 'What Ola handles for you',
   '选择语言': 'Select language',
   '简体中文': '简体中文',
+  '菜单': 'Menu',
 
   /* ---------- hero ---------- */
   /* Three fragments rather than two, so the English build can break after

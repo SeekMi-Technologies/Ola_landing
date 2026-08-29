@@ -1,27 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://olatech.ai/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://olatech.ai/zh</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/" />
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://olatech.ai/product</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/product" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh/product" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/product" />
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olatech.ai/zh/product</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/product" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh/product" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/product" />
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://olatech.ai/integrations</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/integrations" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh/integrations" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/integrations" />
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olatech.ai/zh/integrations</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/integrations" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh/integrations" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/integrations" />
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://olatech.ai/pricing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/pricing" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh/pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/pricing" />
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olatech.ai/zh/pricing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/pricing" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh/pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/pricing" />
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://olatech.ai/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/contact" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/contact" />
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://olatech.ai/zh/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olatech.ai/contact" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://olatech.ai/zh/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olatech.ai/contact" />
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

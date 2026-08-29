@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { useI18n } from '../i18nContext'
-import type { Route } from '../routes'
+import { pathForLanguage, type Route } from '../routes'
 
 type Copy = { title: string; description: string }
 
@@ -85,9 +85,12 @@ function escapeAttribute(value: string) {
 /* The same tags the component writes at runtime, as a string for the
    prerender to bake into each file. One copy table feeds both, so a crawler
    that does not run JS and one that does see the same thing. */
-export function headTagsFor(route: Route, path: string, language: 'en' | 'zh-CN' = 'zh-CN') {
+export function headTagsFor(route: Route, path: string, language: 'en' | 'zh-CN' = 'en') {
   const copy = COPY[language][route]
-  const canonical = `${SITE_URL}${path}`
+  const canonicalPath = pathForLanguage(path, language)
+  const canonical = `${SITE_URL}${canonicalPath}`
+  const englishUrl = `${SITE_URL}${pathForLanguage(path, 'en')}`
+  const chineseUrl = `${SITE_URL}${pathForLanguage(path, 'zh-CN')}`
   const image = `${SITE_URL}/og-image.png`
   const robots = INDEXABLE.includes(route) ? 'index, follow' : 'noindex, nofollow'
   const meta: [string, string, string][] = [
@@ -114,6 +117,9 @@ export function headTagsFor(route: Route, path: string, language: 'en' | 'zh-CN'
     title: copy.title,
     tags: [
       `<link rel="canonical" href="${escapeAttribute(canonical)}" />`,
+      `<link rel="alternate" hreflang="en" href="${escapeAttribute(englishUrl)}" />`,
+      `<link rel="alternate" hreflang="zh-CN" href="${escapeAttribute(chineseUrl)}" />`,
+      `<link rel="alternate" hreflang="x-default" href="${escapeAttribute(englishUrl)}" />`,
       ...meta.map(
         ([attribute, key, content]) =>
           `<meta ${attribute}="${key}" content="${escapeAttribute(content)}" />`,
@@ -142,20 +148,38 @@ function setCanonical(href: string) {
   element.href = href
 }
 
+function setAlternate(hreflang: string, href: string) {
+  let element = document.head.querySelector<HTMLLinkElement>(
+    `link[rel="alternate"][hreflang="${hreflang}"]`,
+  )
+  if (!element) {
+    element = document.createElement('link')
+    element.rel = 'alternate'
+    element.hreflang = hreflang
+    document.head.appendChild(element)
+  }
+  element.href = href
+}
+
 export default function Seo({ route }: { route: Route }) {
   const { language } = useI18n()
 
   useEffect(() => {
     const copy = COPY[language][route]
     const siteUrl = SITE_URL
-    const path = route === 'home' ? '/' : window.location.pathname
-    const canonical = `${siteUrl}${path}`
+    const path = window.location.pathname
+    const canonical = `${siteUrl}${pathForLanguage(path, language)}`
+    const englishUrl = `${siteUrl}${pathForLanguage(path, 'en')}`
+    const chineseUrl = `${siteUrl}${pathForLanguage(path, 'zh-CN')}`
     /* PNG, not the SVG source: X, LinkedIn, WhatsApp and WeChat all skip
        an SVG og:image and fall back to a bare link. */
     const image = `${siteUrl}/og-image.png`
 
     document.title = copy.title
     setCanonical(canonical)
+    setAlternate('en', englishUrl)
+    setAlternate('zh-CN', chineseUrl)
+    setAlternate('x-default', englishUrl)
     setMeta('name', 'description', copy.description)
     setMeta('name', 'robots', route === 'notFound' || route === 'login' ? 'noindex, nofollow' : 'index, follow')
     setMeta('property', 'og:type', 'website')
