@@ -115,6 +115,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, language)
     document.documentElement.lang = language
+    /* The tab title is the one string outside <body>, so the walker never
+       reaches it — it is set here instead. index.html carries the Chinese
+       one so the tab reads correctly before React mounts. */
+    document.title = language === 'en' ? 'Ola - Your New Favorite Hire' : 'Ola — 你的新同事'
 
     applyTree(document.body, language)
 

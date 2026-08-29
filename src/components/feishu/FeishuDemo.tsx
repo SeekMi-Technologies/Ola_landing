@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { Fragment, useState, type ReactNode } from 'react'
 import OlaLogo, { OlaAvatar } from '../OlaLogo'
 import {
   GROUPS,
@@ -303,7 +303,7 @@ function BlockView({ block }: { block: Block }) {
 }
 
 function Thread({ group }: { group: Group }) {
-  const { context, ask, replies, replyCount, followUp } = group
+  const { context, ask, replies, replyCount, interject, followUp } = group
   const lastCtx = context[context.length - 1]
 
   return (
@@ -340,11 +340,19 @@ function Thread({ group }: { group: Group }) {
         {`${replyCount} 条回复`}
       </p>
 
-      {replies.map((msg, i) => (
-        <div key={msg.at + i} className={`flex items-start gap-3 ${i ? '-mt-1' : 'pt-1'}`}>
-          <div className="w-9 shrink-0">{i === 0 && <BotAvatar />}</div>
+      {replies.map((msg, i) => {
+        /* A bot message that follows a human interjection starts a new
+           block, so it gets the avatar and name row back — grouping it
+           with the message above would read as one uninterrupted answer. */
+        const resumes = interject?.after === i - 1
+        const heads = i === 0 || resumes
+
+        return (
+        <Fragment key={msg.at + i}>
+        <div className={`flex items-start gap-3 ${heads ? 'pt-1' : '-mt-1'}`}>
+          <div className="w-9 shrink-0">{heads && <BotAvatar />}</div>
           <div className="min-w-0 flex-1">
-            {i === 0 && (
+            {heads && (
               <div className="flex items-baseline gap-2">
                 <span className="text-[14px] font-semibold text-ink">Ola</span>
                 <span className="rounded-[4px] bg-mist/50 px-1.5 py-px text-[11px] leading-[18px] text-charcoal">
@@ -353,7 +361,7 @@ function Thread({ group }: { group: Group }) {
                 <span className="text-[12px] text-charcoal">{msg.at}</span>
               </div>
             )}
-            {i > 0 && (
+            {!heads && (
               <span className="text-[12px] text-charcoal">{msg.at}</span>
             )}
 
@@ -364,7 +372,15 @@ function Thread({ group }: { group: Group }) {
             </div>
           </div>
         </div>
-      ))}
+
+        {interject?.after === i && (
+          <Message person={interject.by} at={interject.at} showHeader>
+            <p className="text-[14px] leading-[22px] text-ink">{interject.body}</p>
+          </Message>
+        )}
+        </Fragment>
+        )
+      })}
 
       {followUp && (
         <Message person={followUp.by} at={followUp.at} showHeader>

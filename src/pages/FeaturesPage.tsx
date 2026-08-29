@@ -138,16 +138,21 @@ function Catalogue() {
   )
 }
 
-/* Full-colour marks only, so no <picture> swap: every logo in this strip
-   reads on either ground. /integrations needs the swap because its wall
-   includes monochrome marks. */
+/* Same <picture> swap as /integrations: GitHub, Linear and Notion are
+   monochrome black and disappear against the dark theme's card, so those
+   three carry a pale variant. The full-colour marks fall through to the
+   single file. */
 function ToolMark({ tool }: { tool: (typeof MANAGE.tools)[number] }) {
+  const cls = 'block h-6 w-6 shrink-0 object-contain sm:h-7 sm:w-7'
+  const dark = 'logoDark' in tool ? (tool.logoDark as string) : undefined
+
+  if (!dark) return <img src={tool.logo} alt={tool.name} className={cls} />
+
   return (
-    <img
-      src={tool.logo}
-      alt={tool.name}
-      className="block h-6 w-6 shrink-0 object-contain sm:h-7 sm:w-7"
-    />
+    <picture className="flex shrink-0">
+      <source srcSet={dark} media="(prefers-color-scheme: dark)" />
+      <img src={tool.logo} alt={tool.name} className={cls} />
+    </picture>
   )
 }
 

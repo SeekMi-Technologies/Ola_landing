@@ -63,6 +63,11 @@ export type Group = {
    *  posted first, then the answer as labelled sections, a meta line, an
    *  attachment or links where the result warrants one. */
   replies: BotMessage[]
+  /** A human cutting in mid-thread, rendered after `replies[after]`. The
+   *  "plan first, then work" groups need it: the whole point is that the
+   *  plan gets trimmed before anything runs, so the correction has to sit
+   *  between the two bot messages rather than after both of them. */
+  interject?: { after: number; by: Person; at: string; body: string }
   followUp?: { by: Person; at: string; body: string }
 }
 
@@ -971,22 +976,43 @@ export const GROUPS: Group[] = [
     replyCount: 2,
     replies: [
       {
-        at: '08:05',
+        at: '08:02',
         blocks: [
           {
-            "kind": "todos",
-            "at": "08:06",
+            "kind": "text",
+            "lines": [
+              "动手之前先说方案。打算扫三个来源："
+            ]
+          },
+          {
+            "kind": "section",
+            "label": "扫描来源",
             "items": [
-              "按你确认的方案扫了 Langfuse 公开客户和今年的融资新闻。",
-              "GitHub 那条按你说的去掉了。",
-              "剔除同行和研究项目后写进「获客线索表」。"
+              "Langfuse 官网公开的客户名单",
+              "今年的融资新闻里提到 Langfuse 的公司",
+              "GitHub 上引用了 Langfuse 的仓库"
+            ]
+          },
+          {
+            "kind": "text",
+            "lines": [
+              "同行和研究项目会剔掉，剩下的写进「获客线索表」。要删要加你说一声。"
             ]
           }
         ],
       },
       {
-        at: '08:06',
+        at: '08:09',
         blocks: [
+          {
+            "kind": "todos",
+            "at": "08:09",
+            "items": [
+              "扫了 Langfuse 公开客户和今年的融资新闻。",
+              "GitHub 那条按你说的去掉了。",
+              "剔除同行和研究项目后写进「获客线索表」。"
+            ]
+          },
           {
             "kind": "text",
             "lines": [
@@ -1043,9 +1069,12 @@ export const GROUPS: Group[] = [
         ],
       },
     ],
-    followUp: {
+    /* The correction lands between the plan and the work — it is what the
+       second message is answering. */
+    interject: {
+      after: 0,
       by: P.jordan,
-      at: '08:09',
+      at: '08:04',
       body: 'GitHub 那路先去掉，搜出来大多是同行不是客户。',
     },
   },
