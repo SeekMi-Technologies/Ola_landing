@@ -82,7 +82,7 @@ const STEPS = [
 
 function OlaNode() {
   return (
-    <div className="flex h-[72px] w-[108px] shrink-0 flex-col items-center justify-center rounded-[18px] bg-white text-ink shadow-[0_18px_42px_-20px_rgba(8,32,20,0.85)]">
+    <div className="flex h-[72px] w-[108px] shrink-0 flex-col items-center justify-center rounded-[18px] bg-paper text-ink shadow-[0_18px_42px_-20px_rgba(8,32,20,0.85)]">
       <OlaLogo className="h-[21px] w-auto text-ink" />
       <span className="mt-1.5 font-mono text-[10px] text-ink/45">执行中枢</span>
     </div>
@@ -91,7 +91,7 @@ function OlaNode() {
 
 function ResultNode() {
   return (
-    <div className="w-full rounded-[16px] bg-white p-5 text-ink shadow-[0_20px_44px_-24px_rgba(8,32,20,0.85)]">
+    <div className="w-full rounded-[16px] bg-paper p-5 text-ink shadow-[0_20px_44px_-24px_rgba(8,32,20,0.85)]">
       <div className="flex items-center gap-2 text-signal">
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-signal text-white" aria-hidden>
           <IconCheck className="h-3.5 w-3.5" />
@@ -151,7 +151,7 @@ function ResourceNode() {
             aria-hidden
           />
           <span className="absolute -left-5 top-1/2 hidden h-px w-5 -translate-y-1/2 bg-white/30 md:block" aria-hidden />
-          <div className="rounded-[15px] bg-white p-4 text-ink shadow-[0_16px_38px_-26px_rgba(8,32,20,0.8)]">
+          <div className="rounded-[15px] bg-paper p-4 text-ink shadow-[0_16px_38px_-26px_rgba(8,32,20,0.8)]">
             <p className="text-[15px] font-medium tracking-[-0.01em] text-signal">
               {label}
             </p>
@@ -183,13 +183,16 @@ function FlowConnector() {
   )
 }
 
-/* theme-light: --color-field does not flip, so this ground is the same
-   green in both themes while --color-ink inverts underneath it. In dark
-   mode the white cards were painting #ece9e5 text on #ffffff — 1.21:1,
-   measured. Pinning the subtree matches the fixed ground. */
+/* The cards used to be `bg-white` with token-driven `text-ink`, which in
+   dark mode painted #ece9e5 on #ffffff — 1.21:1, measured — so the subtree
+   was pinned to `.theme-light` to keep the two in step. That fixed the
+   contrast but left three hard-white cards glaring on the dark page. They
+   are `bg-paper` now, so surface and ink flip together and the pin is gone:
+   the ground stays the same green (--color-field does not flip) with dark
+   cards on it at night. */
 function FlowPanel() {
   return (
-    <div className="theme-light grid-field overflow-hidden rounded-[var(--radius-card)] px-5 py-7 sm:px-7 sm:py-8">
+    <div className="grid-field overflow-hidden rounded-[var(--radius-card)] px-5 py-7 sm:px-7 sm:py-8">
       <div className="grid items-center md:grid-cols-[minmax(155px,0.8fr)_32px_92px_32px_minmax(235px,1.2fr)] lg:grid-cols-[minmax(220px,1fr)_56px_auto_56px_minmax(300px,1.1fr)]">
         <ResultNode />
         <FlowConnector />
