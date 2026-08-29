@@ -180,13 +180,12 @@ function MobileMenu() {
 
       {open && (
         <div className="absolute inset-x-0 top-[66px] max-h-[calc(100dvh-66px)] overflow-y-auto overscroll-contain border-b border-mist/70 bg-paper shadow-md">
-          {/* Utility strip: everything that leaves the site.
-
-              `.theme-dark` rather than `bg-ink`: ink is a token, so at
-              night it inverted and the strip came out as a pale bar with
-              dark text — the opposite of what it is for. Pinning the scope
-              keeps it dark in both themes, the way the footer does it. */}
-          <div className="theme-dark bg-bone">
+          {/* Utility strip: everything that leaves the site. It sits on the
+              sheet's own surface — white by day, the same dark as the rows
+              below it at night — and is set apart by its small caps and the
+              rule under it rather than by a band of colour. It used to be
+              `bg-ink`, which inverted at night into a pale bar. */}
+          <div className="border-b border-mist/60 bg-paper">
             <div className="shell flex items-center gap-6 py-3">
               {[
                 ['文档', DOCS_URL],
@@ -198,7 +197,7 @@ function MobileMenu() {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setOpen(false)}
-                  className="inline-flex items-center gap-1.5 text-[13px] font-medium uppercase tracking-[0.08em] text-ink/75 transition-colors hover:text-ink"
+                  className="inline-flex items-center gap-1.5 text-[13px] font-medium uppercase tracking-[0.08em] text-ink/55 transition-colors hover:text-ink"
                 >
                   {label}
                   <svg

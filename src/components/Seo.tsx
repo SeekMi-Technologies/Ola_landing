@@ -5,7 +5,7 @@ import type { Route } from '../routes'
 
 type Copy = { title: string; description: string }
 
-const COPY: Record<'en' | 'zh-CN', Record<Route, Copy>> = {
+export const COPY: Record<'en' | 'zh-CN', Record<Route, Copy>> = {
   'zh-CN': {
     home: {
       title: 'Ola — 你的新同事',
@@ -68,6 +68,60 @@ const COPY: Record<'en' | 'zh-CN', Record<Route, Copy>> = {
   },
 }
 
+/* The origin every absolute URL is built from. Set in .env.production; the
+   window fallback keeps preview deployments shareable, and the literal is
+   what the prerender uses, where there is no window. */
+export const SITE_URL = (
+  import.meta.env.VITE_SITE_URL ||
+  (typeof window === 'undefined' ? 'https://olatech.ai' : window.location.origin)
+).replace(/\/$/, '')
+
+export const INDEXABLE: Route[] = ['home', 'product', 'integrations', 'pricing', 'contact']
+
+function escapeAttribute(value: string) {
+  return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
+}
+
+/* The same tags the component writes at runtime, as a string for the
+   prerender to bake into each file. One copy table feeds both, so a crawler
+   that does not run JS and one that does see the same thing. */
+export function headTagsFor(route: Route, path: string, language: 'en' | 'zh-CN' = 'zh-CN') {
+  const copy = COPY[language][route]
+  const canonical = `${SITE_URL}${path}`
+  const image = `${SITE_URL}/og-image.png`
+  const robots = INDEXABLE.includes(route) ? 'index, follow' : 'noindex, nofollow'
+  const meta: [string, string, string][] = [
+    ['name', 'description', copy.description],
+    ['name', 'robots', robots],
+    ['property', 'og:type', 'website'],
+    ['property', 'og:site_name', 'Ola'],
+    ['property', 'og:title', copy.title],
+    ['property', 'og:description', copy.description],
+    ['property', 'og:url', canonical],
+    ['property', 'og:locale', language === 'en' ? 'en_US' : 'zh_CN'],
+    ['property', 'og:image', image],
+    ['property', 'og:image:type', 'image/png'],
+    ['property', 'og:image:width', '1200'],
+    ['property', 'og:image:height', '630'],
+    ['name', 'twitter:card', 'summary_large_image'],
+    ['name', 'twitter:title', copy.title],
+    ['name', 'twitter:description', copy.description],
+    ['name', 'twitter:image', image],
+    ['name', 'twitter:image:alt', copy.title],
+  ]
+
+  return {
+    title: copy.title,
+    tags: [
+      `<link rel="canonical" href="${escapeAttribute(canonical)}" />`,
+      ...meta.map(
+        ([attribute, key, content]) =>
+          `<meta ${attribute}="${key}" content="${escapeAttribute(content)}" />`,
+      ),
+    ].join('\n    '),
+  }
+}
+
 function setMeta(attribute: 'name' | 'property', key: string, content: string) {
   let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`)
   if (!element) {
@@ -93,9 +147,7 @@ export default function Seo({ route }: { route: Route }) {
 
   useEffect(() => {
     const copy = COPY[language][route]
-    // VITE_SITE_URL should be set to the production origin at deployment.
-    // The origin fallback keeps previews and review deployments shareable.
-    const siteUrl = (import.meta.env.VITE_SITE_URL || window.location.origin).replace(/\/$/, '')
+    const siteUrl = SITE_URL
     const path = route === 'home' ? '/' : window.location.pathname
     const canonical = `${siteUrl}${path}`
     /* PNG, not the SVG source: X, LinkedIn, WhatsApp and WeChat all skip

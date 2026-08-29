@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ola-landing-blue.vercel.app/</loc>
+    <loc>https://olatech.ai/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://ola-landing-blue.vercel.app/product</loc>
+    <loc>https://olatech.ai/product</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ola-landing-blue.vercel.app/integrations</loc>
+    <loc>https://olatech.ai/integrations</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ola-landing-blue.vercel.app/pricing</loc>
+    <loc>https://olatech.ai/pricing</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ola-landing-blue.vercel.app/contact</loc>
+    <loc>https://olatech.ai/contact</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

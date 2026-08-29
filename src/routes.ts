@@ -3,10 +3,15 @@
  * dependency. `pathname` is read once at mount and on popstate; nothing
  * else changes it, because every in-app link is a real <a href>.
  *
- * Every path has to serve index.html. Vite's dev server does this by
- * default (appType: 'spa'); for static hosts the rewrite is committed:
- * public/_redirects (Netlify / Cloudflare Pages) and vercel.json (Vercel).
- * Other hosts need the same rule — nginx `try_files $uri /index.html`.
+ * In development every path serves index.html and this table decides what
+ * renders; Vite does that by default (appType: 'spa').
+ *
+ * The production build does not rely on it. `npm run build` prerenders one
+ * HTML file per route (see scripts/prerender.mjs), so /pricing is served as
+ * dist/pricing/index.html and this table only takes over for client-side
+ * navigation afterwards. A host therefore needs directory-index resolution
+ * — Vercel and Netlify do it by default; nginx wants
+ * `try_files $uri $uri/index.html /404.html`.
  */
 export type Route = 'home' | 'integrations' | 'pricing' | 'product' | 'login' | 'contact' | 'notFound'
 

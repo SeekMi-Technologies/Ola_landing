@@ -107,10 +107,17 @@ function applyTree(root: Node, language: Language) {
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY)
-    return saved === 'en' ? 'en' : 'zh-CN'
-  })
+  /* Always Chinese for the first render, then the stored choice. Reading
+     localStorage in the initialiser would make the client's first render
+     differ from the prerendered HTML — which is Chinese, the source
+     language — and React would throw the hydrated tree away. An English
+     reader sees one frame of Chinese instead; the alternative is no
+     prerendered HTML at all. */
+  const [language, setLanguage] = useState<Language>('zh-CN')
+
+  useEffect(() => {
+    if (window.localStorage.getItem(STORAGE_KEY) === 'en') setLanguage('en')
+  }, [])
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, language)

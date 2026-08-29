@@ -19,8 +19,12 @@ import Pillars from './components/Pillars'
 import Pricing from './components/Pricing'
 import Workspace from './components/Workspace'
 
-export default function App() {
-  const [route, setRoute] = useState(() => routeFor(window.location.pathname))
+/* `initialPath` is only passed by the prerender, which has no window. In
+   the browser the component reads the address itself, exactly as before. */
+export default function App({ initialPath }: { initialPath?: string } = {}) {
+  const [route, setRoute] = useState(() =>
+    routeFor(initialPath ?? (typeof window === 'undefined' ? '/' : window.location.pathname)),
+  )
 
   useEffect(() => {
     if (window.location.pathname.replace(/\/+$/, '') === '/features') {
