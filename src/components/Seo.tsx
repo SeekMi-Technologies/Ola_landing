@@ -98,7 +98,9 @@ export default function Seo({ route }: { route: Route }) {
     const siteUrl = (import.meta.env.VITE_SITE_URL || window.location.origin).replace(/\/$/, '')
     const path = route === 'home' ? '/' : window.location.pathname
     const canonical = `${siteUrl}${path}`
-    const image = `${siteUrl}/og-image.svg`
+    /* PNG, not the SVG source: X, LinkedIn, WhatsApp and WeChat all skip
+       an SVG og:image and fall back to a bare link. */
+    const image = `${siteUrl}/og-image.png`
 
     document.title = copy.title
     setCanonical(canonical)
@@ -109,14 +111,16 @@ export default function Seo({ route }: { route: Route }) {
     setMeta('property', 'og:title', copy.title)
     setMeta('property', 'og:description', copy.description)
     setMeta('property', 'og:url', canonical)
+    setMeta('property', 'og:locale', language === 'en' ? 'en_US' : 'zh_CN')
     setMeta('property', 'og:image', image)
-    setMeta('property', 'og:image:type', 'image/svg+xml')
+    setMeta('property', 'og:image:type', 'image/png')
     setMeta('property', 'og:image:width', '1200')
     setMeta('property', 'og:image:height', '630')
     setMeta('name', 'twitter:card', 'summary_large_image')
     setMeta('name', 'twitter:title', copy.title)
     setMeta('name', 'twitter:description', copy.description)
     setMeta('name', 'twitter:image', image)
+    setMeta('name', 'twitter:image:alt', copy.title)
   }, [language, route])
 
   return null

@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/ola-favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f6f4f2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1917" media="(prefers-color-scheme: dark)" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,6 +30,49 @@
     <meta name="twitter:title" content="Ola — 你的新同事" />
     <meta name="twitter:description" content="Ola 是你团队的新成员：在已有工具里，把你交代的事做完。" />
     <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Identity for the search engines that read it. <Seo> rewrites the
+         per-page tags at runtime; this block is static because it describes
+         the organisation, not the page. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://ola-landing-blue.vercel.app/#organization",
+            "name": "Ola",
+            "url": "https://ola-landing-blue.vercel.app/",
+            "logo": "https://ola-landing-blue.vercel.app/apple-touch-icon.png",
+            "email": "duke@olatech.ai",
+            "sameAs": [
+              "https://www.linkedin.com/company/olatech-ai/",
+              "https://x.com/useola_ai"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://ola-landing-blue.vercel.app/#website",
+            "url": "https://ola-landing-blue.vercel.app/",
+            "name": "Ola",
+            "inLanguage": ["zh-CN", "en"],
+            "publisher": { "@id": "https://ola-landing-blue.vercel.app/#organization" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "Ola",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web, Feishu, Lark, WhatsApp",
+            "publisher": { "@id": "https://ola-landing-blue.vercel.app/#organization" },
+            "offers": [
+              { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Pro", "price": "20", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Max", "price": "100", "priceCurrency": "USD" }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

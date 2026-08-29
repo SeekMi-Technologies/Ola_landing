@@ -1,0 +1,10 @@
+# Ola — https://ola-landing-blue.vercel.app
+# /login and the 404 carry <meta name="robots" content="noindex"> at
+# runtime; they are listed here as well so a crawler that does not run JS
+# still skips them.
+
+User-agent: *
+Allow: /
+Disallow: /login
+
+Sitemap: https://ola-landing-blue.vercel.app/sitemap.xml
