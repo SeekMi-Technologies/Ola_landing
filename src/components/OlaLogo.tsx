@@ -24,17 +24,37 @@ const RING =
 
 type MarkProps = { className?: string; style?: React.CSSProperties }
 
-/** The official round Favicon for compact identity surfaces such as chat
- * avatars. Keeping it as an asset preserves the supplied colours exactly. */
+/** The A mark from OLA_Favicon.svg, for compact identity surfaces such as
+ *  chat avatars.
+ *
+ *  Drawn rather than served as /ola-favicon.svg, which is a fixed cream
+ *  disc (#eaede4) under a near-black mark: on a white card the disc barely
+ *  separates from it, and on a dark one it is a bright chip. Here the two
+ *  values are mixed from the theme the way the mock's person avatars are —
+ *  a 22% tint of the accent for the disc, the accent pulled 62% toward the
+ *  ink for the mark — so it sits at the same weight as the faces beside it
+ *  in both themes. The favicon file itself is untouched; a browser tab has
+ *  no theme to follow. */
 export function OlaAvatar({ className, style }: MarkProps) {
   return (
-    <img
-      src="/ola-favicon.svg"
-      alt=""
-      aria-hidden
+    <svg
+      viewBox="0 0 319.96 319.96"
       className={className}
       style={style}
-    />
+      fillRule="evenodd"
+      aria-hidden
+    >
+      <circle
+        cx="159.98"
+        cy="159.98"
+        r="159.98"
+        fill="color-mix(in srgb, var(--color-signal) 22%, var(--color-paper))"
+      />
+      <path
+        d="M173.54,63.49l76.97,133.31c8.95,15.51,4.48,23.26-13.43,23.26H83.14c-17.9,0-22.38-7.75-13.43-23.26L146.68,63.49c8.95-15.51,17.9-15.51,26.86,0ZM167.26,108.66l40.98,70.99c4.77,8.26,2.39,12.38-7.15,12.38h-81.97c-9.53,0-11.91-4.13-7.15-12.38l40.98-70.99c4.76-8.26,9.53-8.26,14.3,0Z"
+        fill="color-mix(in srgb, var(--color-signal) 62%, var(--color-ink))"
+      />
+    </svg>
   )
 }
 
