@@ -1,0 +1,472 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Design tokens — Ola visual language
+   "An engineer's whiteboard on cream paper."
+   ------------------------------------------------------------------ */
+@theme {
+  /* Palette */
+  /* #302c2c, not the style guide's #181717 — that is the value the Figma
+     ships (node 519:17932). It is a warmer near-black that sits better on
+     the cream ground. Muted text is this same colour at 65% alpha in the
+     Figma, so use `text-ink/65` rather than a separate grey. */
+  --color-ink: #302c2c; /* dark borders, primary text */
+  --color-bone: #f6f4f2; /* page canvas — matches the Figma exactly */
+  --color-panel: #242424; /* Figma's dark product panel */
+  --color-paper: #ffffff; /* card surfaces */
+  --color-graphite: #2e2d2d; /* secondary borders */
+  --color-charcoal: #575555; /* muted text */
+  --color-ash: #706e6d; /* tertiary borders, captions */
+  /* Nav sits a touch DARKER than the canvas
+     (canvas #f9f7f6 / nav #f7f5f4). Keep that direction if bone moves. */
+  --color-linen: #f4f2f0; /* nav bg, subtle elevation */
+  --color-mist: #d5d3d2; /* light dividers, shadow base */
+  /* Brand accent. Was Signal Red #d04841; switched to the Figma's
+     highlight-box green (node 519:17936) as the page-wide theme.
+     The token keeps its name — it is "the accent", whatever the hue. */
+  --color-signal: #175134;
+  /* Semantic error, deliberately NOT the accent. An error state has to
+     read as an error; a green incident card does not. Used only where
+     something is actually wrong. */
+  --color-danger: #b03d36;
+  /* Foreground for ink-FILLED surfaces. Must flip with the theme:
+     a hardcoded white label vanishes once `ink` becomes the light
+     value in dark mode. */
+  --color-on-ink: #ffffff;
+
+  /* Sampled off the Figma node 519:19103 — #cca000 is
+     the panel ground there (646k of 819k pixels), #e0be43 its light tone.
+     Used by the illustrations in "不是插件，是同事". Unlike signal it does
+     NOT flip for dark mode: gold reads on both #ffffff and #232220, which
+     the dark green did not. */
+  --color-gold: #cca000;
+  --color-gold-lit: #e0be43;
+
+  /* Terracotta, used by the approval panel in "始终由你掌控". */
+  --color-clay: #9f3f22;
+  --color-clay-tint: #f3dfd6;
+  --color-clay-deep: #8c351c;
+
+  /* Illustration-field palettes. Structure comes from the Figma's
+     "Securely access resources" panels (node 519:19019). Two sets:
+     green (the page theme) and the Figma's own navy. Panels pick one
+     via .grid-field / .grid-field--navy — see the class below. */
+  --color-field: #2b7350; /* green field */
+  --color-field-pill: #3a7d5d;
+  --color-field-lit: #a9d6bf;
+  --color-field-line: #5f9a7d;
+
+  /* Navy, sampled pixel-by-pixel off node 519:19019. */
+  --color-navy: #15315b;
+  --color-navy-pill: #496495;
+  --color-navy-lit: #aac6f1;
+  --color-navy-line: #4f6484;
+
+  /* Type */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Stands in for the reference's proprietary display face on eyebrows and small caps
+     labels. Space Grotesk 500 + 0.05em tracking is the substitution their
+     own names. */
+  --font-label: "Space Grotesk", "Inter", "PingFang SC", sans-serif;
+
+  /* Radius — buttons 8, everything else 16, hero-tier surfaces 32 */
+  --radius-btn: 8px;
+  --radius-card: 16px;
+  --radius-hero: 32px;
+
+  /* Shadows. `sm` is the universal card elevation (2% — nearly invisible
+     by design); `md` is reserved for HOVER on nav and primary buttons. */
+  --shadow-sm: 0 4px 8px 0 rgba(24, 23, 23, 0.02);
+  --shadow-md: 0 4px 16px 0 rgba(24, 23, 23, 0.16);
+
+  /* Layout */
+  --spacing-section: 96px;
+
+  /* --- Feishu product-demo palette ---------------------------------
+     These belong to the Ola-in-Feishu mockup, NOT to the page. The
+     mockup depicts a different product surface, so it keeps Feishu's
+     own brand rather than borrowing Signal Red. Do not reach for these
+     outside src/components/feishu/.
+
+     Values marked (官方) are from Feishu's own message-card design spec
+     or measured on feishu.cn. See the notes below for
+     why the page tokens and these are kept apart.
+     ---------------------------------------------------------------- */
+  /* Feishu's real values, for reference:
+       brand #3370FF · text #1F2329 · link #1C4CBA · note #646A73
+     Those are COOL. Dropped into this cream page they read as a pasted
+     screenshot, so the demo uses the page's own warm tokens instead
+     (ink / charcoal / ash / mist / linen) and keeps only these two.  */
+  --color-fs-link: #3a5a80; /* warmed hyperlink */
+  --color-ok: #4a7c3f; /* warmed success green */
+}
+
+/* Chinese stays on familiar local system fonts: PingFang on Apple devices,
+   Microsoft YaHei on Windows, and Noto CJK where it is installed. This keeps
+   Chinese typography stable without adding another remote font request. */
+:lang(zh-CN) {
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB",
+    "Noto Sans CJK SC", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-label: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+}
+
+/* ------------------------------------------------------------------
+   Dark mode — follows the browser only. There is no in-page toggle, so
+   no localStorage, no pre-paint script and no third "system" state to
+   resolve.
+
+   The token NAMES stay literal (bone / paper / ink). They are used as
+   ROLES throughout — ground / surface / text — which is how the source
+   style guide defines them too, so only their VALUES swap here. Read
+   `bone` as "the page ground", not as "a cream colour".
+
+   Hues stay warm on purpose: a neutral grey dark mode would break with
+   the cream world the light theme lives in.
+   ------------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bone: #1a1917; /* ground */
+    --color-paper: #232220; /* lifted surface */
+    --color-linen: #201f1d; /* nav / subtle tint */
+    --color-ink: #ece9e5; /* primary text */
+    --color-charcoal: #a5a09b; /* muted text */
+    --color-ash: #8a857f; /* tertiary */
+    --color-mist: #34322f; /* dividers */
+    --color-graphite: #d8d4cf; /* stays 'ink, one step softer' */
+    --color-on-ink: #1a1917;
+    --color-panel: #2b2a27; /* #242424 all but vanishes on this ground */
+
+    /* #175134 measures ~1.5:1 on the dark ground — unusable. Lifted to
+       roughly 6.5:1 while staying the same hue family. */
+    --color-signal: #4e9b6d;
+    --color-danger: #e0716a;
+    --color-ok: #6fb35f;
+
+    --color-clay: #c56340;
+    --color-clay-tint: #3a2a22;
+    --color-clay-deep: #e39070;
+
+    /* Shadows carry no weight on a dark ground; lean on borders instead. */
+    --shadow-sm: 0 4px 8px 0 rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 4px 16px 0 rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Two scope classes that pin a subtree to one palette regardless of the
+   browser preference. Everything inside keeps using the same token
+   names, so no component needs to know which scope it sits in.
+   ------------------------------------------------------------------ */
+
+/* Always dark — used by the footer. Its ground is deliberately deeper
+   than the page ground in BOTH themes: in dark mode a #1c1b19 footer on
+   a #1a1917 page would be two units apart and invisible, so the dark
+   theme pushes it further down (see the media block below). */
+.theme-dark {
+  --color-bone: #1c1b19;
+  --color-paper: #262522;
+  --color-linen: #221f1d;
+  --color-ink: #ece9e5;
+  --color-charcoal: #a5a09b;
+  --color-ash: #8a857f;
+  --color-mist: #35332f;
+  --color-graphite: #d8d4cf;
+  --color-on-ink: #1c1b19;
+  --color-signal: #4e9b6d;
+  --color-danger: #e0716a;
+  --color-ok: #6fb35f;
+}
+
+@media (prefers-color-scheme: dark) {
+  .theme-dark {
+    --color-bone: #0f0e0d; /* stays clearly below the #1a1917 page */
+    --color-paper: #1a1917;
+    --color-linen: #141312;
+    --color-on-ink: #0f0e0d;
+    --color-mist: #2c2a27;
+  }
+}
+
+/* Pins its subtree to the light palette. The Feishu mockup depicts that
+   app's LIGHT theme — its message-card status tints are fixed light
+   values, so letting the surrounding tokens invert would leave pale
+   header bars stranded on dark cards. */
+.theme-light {
+  --color-bone: #f6f4f2;
+  --color-paper: #ffffff;
+  --color-linen: #f4f2f0;
+  --color-ink: #302c2c;
+  --color-charcoal: #575555;
+  --color-ash: #706e6d;
+  --color-mist: #d5d3d2;
+  --color-graphite: #2e2d2d;
+  --color-on-ink: #ffffff;
+  --color-signal: #175134;
+  --color-danger: #b03d36;
+  --color-ok: #4a7c3f;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color-scheme: light dark;
+  }
+
+  body {
+    background-color: var(--color-bone);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  ::selection {
+    background-color: var(--color-signal);
+    color: #fff;
+  }
+}
+
+@layer components {
+  /* Type scale — minor third (1.2), base 16px.
+     Tracking is a flat -0.01em on every heading: that is what
+     the reference design ships (h1/h2 = 52.5px / 500 / -0.525px).
+     Nothing here goes below weight 400 — their Inter has no lighter
+     master, so a 300 would be lighter than anything on their site. */
+  /* Figma 519:17935 — Inter Medium 72px / 84.96px line / -2.16px tracking.
+     -2.16px at 72px is -0.03em, which contradicts the -0.01em measured on
+     the live site; the Figma wins here because it is the design being
+     implemented. */
+  .t-display {
+    font-size: clamp(40px, 5.6vw, 72px);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+  }
+  /* Figma 519:19707 — Inter Medium 48px / 56.64px line / -0.96px,
+     i.e. -0.02em. Pairs with .t-display's -0.03em; the scale tightens
+     as it grows, which is the Figma's rule throughout. */
+  /* The display scale's -0.03em was measured on Latin capitals, where
+     tightening at 72px is right. Han glyphs are already square and evenly
+     set, so the same value reads as squeezing them — the Chinese build
+     loosens it, English keeps the measured figure. `lang` is kept in sync
+     by the language switcher. */
+  :root:lang(zh-CN) .t-display {
+    letter-spacing: -0.01em;
+  }
+
+  /* English runs to two lines here where Chinese fits one, so the same
+     72px cap that reads as confident in 你的新同事 reads as shouting in
+     "Your New / Favorite Hire" — four words filling half the viewport. */
+  :root:lang(en) .t-display {
+    font-size: clamp(34px, 4.4vw, 56px);
+  }
+
+  .t-heading-lg {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+  }
+  .t-heading {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .t-subheading {
+    font-size: clamp(17px, 1.6vw, 20px);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+  .t-body-sm {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.43;
+  }
+  .t-caption {
+    font-family: var(--font-label);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Chinese small labels cannot use .t-caption. Measured on the page:
+     Space Grotesk renders 区 at exactly the fallback width (40px at a
+     40px size) but A at 25.3px — it has no Han glyphs, so every CJK
+     caption silently dropped to the system font and the label typeface
+     was lost anyway. On top of that `uppercase` is a no-op on Han, and
+     0.05em tracking pulls apart glyphs that are already square and
+     evenly spaced.
+
+     This variant drops all three, and buys back the hierarchy that
+     uppercase was carrying with weight instead. */
+  .t-caption-cn {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  /* Illustration panel: a colour field with a faint engineering grid.
+     The grid is baked into the background rather than layered as an
+     overlay div, so a panel stays one element.
+
+     The panel publishes --field-* to its subtree, so the pills, tags and
+     connectors inside recolour with the panel and no component needs to
+     know which theme it is in. Add .grid-field--navy for the Figma's
+     navy; the bare class is the page's green. */
+  .grid-field {
+    --field: var(--color-field);
+    --field-pill: var(--color-field-pill);
+    --field-lit: var(--color-field-lit);
+    --field-line: var(--color-field-line);
+    --field-ink: var(--color-signal); /* text on lit pills and tags */
+
+    background-color: var(--field);
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0.06) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .grid-field--navy {
+    --field: var(--color-navy);
+    --field-pill: var(--color-navy-pill);
+    --field-lit: var(--color-navy-lit);
+    --field-line: var(--color-navy-line);
+    --field-ink: var(--color-navy);
+  }
+
+  /* Black ground for the hero showcase. Same 32px grid as the other
+     fields — the panel is one element, no overlay div. The rules are
+     lifted to 8% because a near-black ground swallows the 6% used on
+     the coloured fields. */
+  .grid-field--ink {
+    --field: #141312;
+    --field-pill: #2a2825;
+    --field-lit: #3a3733;
+    --field-line: #333029;
+    --field-ink: var(--color-bone);
+
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0.08) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  }
+
+  /* In-page jumps glide rather than teleport — the hero link points at a
+     panel just below the fold, and a hard jump there reads as a page
+     change. Respects a reduced-motion preference. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Inline highlight inside a headline. Deliberately `display: inline`
+     rather than inline-block: vertical padding on an inline box paints
+     outward without touching the line box, so the glyphs never move and
+     the highlight cannot sit off the baseline of the words beside it —
+     which is exactly how the old inline-block version went wrong.
+     `box-decoration-break: clone` keeps the radius and padding on both
+     halves if it ever wraps. */
+  .mark-inline {
+    color: #fff;
+    border-radius: 0.16em;
+    padding: 0.05em 0.18em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .mark-inline--signal {
+    background-color: var(--color-signal);
+  }
+
+  /* The desktop composition intentionally splits after “Your New”. iPad is
+     the in-between case: there is room for one tidy line, so keep the break
+     hidden there while preserving the existing desktop and phone treatment. */
+  .br-en {
+    display: none;
+  }
+
+  @media (max-width: 767px), (min-width: 1024px) {
+    :root:lang(en) .br-en {
+      display: revert;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    :root:lang(en) .t-display {
+      white-space: nowrap;
+    }
+  }
+
+  /* Translation rewrites text nodes independently, so a trailing space in
+     “Your New ” is not reliable before a hidden <br>. Keep the word space
+     as an explicit inline element instead. */
+  .hero-en-space {
+    display: none;
+  }
+
+  :root:lang(en) .hero-en-space {
+    display: inline;
+    white-space: pre;
+  }
+
+  /* Chinese has no word spaces, so the highlight would otherwise butt
+     against 新; English already has a real space in front of it and does
+     not want both. */
+  :root:lang(zh-CN) .mark-inline {
+    margin-inline-start: 0.16em;
+  }
+
+  .shell {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: clamp(24px, 6vw, 40px);
+  }
+
+  /* Buttons — 8px radius, ink-filled primary */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: var(--radius-btn);
+    font-size: 15px;
+    font-weight: 500;
+    padding: 11px 20px;
+    transition: background-color 0.18s ease, color 0.18s ease,
+      border-color 0.18s ease, transform 0.18s ease;
+  }
+  .btn-primary {
+    background-color: var(--color-ink);
+    color: var(--color-on-ink);
+    box-shadow: var(--shadow-sm);
+  }
+  /* Shadow deepens on hover, but the button does not lift — no transform.
+     Elevation change is the whole hover affordance here. */
+  .btn-primary:hover {
+    background-color: var(--color-graphite);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-ghost {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .btn-ghost:hover {
+    color: var(--color-signal);
+  }
+}

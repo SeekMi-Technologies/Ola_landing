@@ -1,0 +1,12 @@
+<!-- The O from the OLA wordmark. The full three-letter lockup is 2.76:1 and
+     turns to mush at 16px, so the favicon carries the ring alone.
+     `evenodd` is required: the outer and inner circles wind the same way,
+     and without it the ring fills in as a solid disc.
+     The two colours are the site's own --color-signal light/dark pair. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-9 -9 112.69 112.69">
+  <style>
+    path { fill: #175134 }
+    @media (prefers-color-scheme: dark) { path { fill: #4e9b6d } }
+  </style>
+  <path fill-rule="evenodd" d="M47.35,0C21.2,0,0,21.2,0,47.35s21.2,47.35,47.35,47.35,47.35-21.2,47.35-47.35S73.5,0,47.35,0ZM47.35,80.13c-18.1,0-32.78-14.68-32.78-32.78S29.24,14.57,47.35,14.57s32.78,14.68,32.78,32.78-14.68,32.78-32.78,32.78Z"/>
+</svg>
