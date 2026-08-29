@@ -1,1 +1,5 @@
-/*    /index.html   200
+# No SPA fallback any more: the build prerenders a real HTML file for every
+# route, so /pricing is dist/pricing/index.html rather than the shell with
+# the router deciding afterwards. Anything unmatched falls through to
+# 404.html, which the build also writes — a genuine 404 status instead of a
+# 200 that renders a "page not found" body.

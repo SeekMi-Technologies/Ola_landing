@@ -180,8 +180,12 @@ function MobileMenu() {
 
       {open && (
         <div className="absolute inset-x-0 top-[66px] max-h-[calc(100dvh-66px)] overflow-y-auto overscroll-contain border-b border-mist/70 bg-paper shadow-md">
-          {/* Utility strip: everything that leaves the site. */}
-          <div className="bg-ink">
+          {/* Utility strip: everything that leaves the site. It sits on the
+              sheet's own surface — white by day, the same dark as the rows
+              below it at night — and is set apart by its small caps and the
+              rule under it rather than by a band of colour. It used to be
+              `bg-ink`, which inverted at night into a pale bar. */}
+          <div className="border-b border-mist/60 bg-paper">
             <div className="shell flex items-center gap-6 py-3">
               {[
                 ['文档', DOCS_URL],
@@ -193,7 +197,7 @@ function MobileMenu() {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setOpen(false)}
-                  className="inline-flex items-center gap-1.5 text-[13px] font-medium uppercase tracking-[0.08em] text-[var(--color-on-ink)]/75 transition-colors hover:text-[var(--color-on-ink)]"
+                  className="inline-flex items-center gap-1.5 text-[13px] font-medium uppercase tracking-[0.08em] text-ink/55 transition-colors hover:text-ink"
                 >
                   {label}
                   <svg
@@ -229,24 +233,16 @@ function MobileMenu() {
               </div>
             ))}
 
-            {/* Account row: the quiet link and the one primary action, the
-                way the bar pairs them at full width. */}
-            <div className="flex items-center justify-between gap-4 py-5">
+            {/* Account row. 申请使用 is not repeated here: the bar keeps its
+                own button on screen while the sheet is open, so the sheet
+                showed the same call to action twice, 60px apart. */}
+            <div className="flex items-center py-5">
               <a
                 href="/login"
                 onClick={() => setOpen(false)}
                 className="-mx-3 rounded-[10px] px-3 py-2 text-[16px] text-ink/70 transition-colors hover:bg-bone hover:text-ink"
               >
                 登录
-              </a>
-              <a
-                href={APPLY_URL}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setOpen(false)}
-                className="btn btn-primary"
-              >
-                申请使用
               </a>
             </div>
           </nav>

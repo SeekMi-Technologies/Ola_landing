@@ -107,18 +107,25 @@ function applyTree(root: Node, language: Language) {
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY)
-    return saved === 'en' ? 'en' : 'zh-CN'
-  })
+  /* Always Chinese for the first render, then the stored choice. Reading
+     localStorage in the initialiser would make the client's first render
+     differ from the prerendered HTML — which is Chinese, the source
+     language — and React would throw the hydrated tree away. An English
+     reader sees one frame of Chinese instead; the alternative is no
+     prerendered HTML at all. */
+  const [language, setLanguage] = useState<Language>('zh-CN')
+
+  useEffect(() => {
+    if (window.localStorage.getItem(STORAGE_KEY) === 'en') setLanguage('en')
+  }, [])
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, language)
     document.documentElement.lang = language
-    /* The tab title is the one string outside <body>, so the walker never
-       reaches it — it is set here instead. index.html carries the Chinese
-       one so the tab reads correctly before React mounts. */
-    document.title = language === 'en' ? 'Ola - Your New Favorite Hire' : 'Ola — 你的新同事'
+    /* The tab title is set by <Seo>, which knows the route as well as the
+       language — writing it here too meant every language switch replaced
+       the current page's title with the home page's. index.html carries the
+       Chinese home title so the tab reads correctly before React mounts. */
 
     applyTree(document.body, language)
 
