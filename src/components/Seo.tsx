@@ -8,7 +8,7 @@ type Copy = { title: string; description: string }
 const COPY: Record<'en' | 'zh-CN', Record<Route, Copy>> = {
   'zh-CN': {
     home: {
-      title: 'Ola — 你的新同事。',
+      title: 'Ola — 你的新同事',
       description: 'Ola 是团队的新成员：在飞书、GitHub、Notion 等已有工具里，把你交代的事做完。',
     },
     product: {
