@@ -42,28 +42,12 @@ function PersonMark({ className = 'h-3.5 w-3.5' }: { className?: string }) {
    blue/warm split is the whole read: one thread is a public room, the
    other is sealed. Ola's avatar and name stay navy in both, because the
    heading's claim is that it is the same Ola on either side. */
-type Accent = {
-  /** the human's bubble and their avatar */
-  bubble: string
-  bubbleInk: string
-  /** the event strip that closes the thread */
-  strip: string
-  stripInk: string
-}
+/* The class that publishes --chat-* to the panel; the values, and their
+   dark-mode counterparts, live in index.css. */
+type Accent = 'chat-channel' | 'chat-private'
 
-const CHANNEL: Accent = {
-  bubble: '#d5e2f4',
-  bubbleInk: '#16325c',
-  strip: '#e4edfa',
-  stripInk: '#2b4b7d',
-}
-
-const PRIVATE: Accent = {
-  bubble: '#e6dfd5',
-  bubbleInk: '#4a423a',
-  strip: '#efe9e1',
-  stripInk: '#5c554c',
-}
+const BUBBLE = { backgroundColor: 'var(--chat-bubble)', color: 'var(--chat-bubble-ink)' }
+const STRIP = { backgroundColor: 'var(--chat-strip)', color: 'var(--chat-strip-ink)' }
 
 type Panel = {
   eyebrow: string
@@ -87,7 +71,7 @@ const PANELS: Panel[] = [
     eyebrow: '群聊',
     title: '团队上下文，共同推进',
     tag: { label: '#项目推进' },
-    accent: CHANNEL,
+    accent: 'chat-channel',
     roster: ['你', '林', '苏'],
     rosterMeta: '6 位成员',
     ask: '@Ola 汇报本周还没完成的事项。',
@@ -99,7 +83,7 @@ const PANELS: Panel[] = [
     eyebrow: '私聊',
     title: '个人上下文，彼此隔离',
     tag: { label: '仅你可见', lock: true },
-    accent: PRIVATE,
+    accent: 'chat-private',
     roster: ['你', 'ola'],
     rosterMeta: '你与 Ola',
     ask: '准备我明天的客户会议。',
@@ -109,13 +93,20 @@ const PANELS: Panel[] = [
   },
 ]
 
-const CARD = '#f7f7f7'
+/* The mock card's chassis, as tokens rather than fixed hexes: it used to
+   be a hard #f7f7f7 panel with a white bubble, which on the dark page was
+   two of the brightest blocks on the whole home page. The accent tints
+   below stay fixed — they are what says "public room" vs "sealed", and
+   they still read on either card. */
+const CARD = 'var(--color-linen)'
 
 function ChatPanel({ panel }: { panel: Panel }) {
   const { accent } = panel
 
   return (
-    <article className="grid-field grid-field--navy flex flex-col rounded-[var(--radius-card)] p-5 sm:p-7">
+    <article
+      className={`${accent} grid-field grid-field--navy flex flex-col rounded-[var(--radius-card)] p-5 sm:p-7`}
+    >
       <div className="flex items-start justify-between gap-4 text-white">
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-white/55">
@@ -136,10 +127,10 @@ function ChatPanel({ panel }: { panel: Panel }) {
       {/* No min-height: it was 284px against ~255px of content, which is
           the blank band that used to sit under the closing strip. */}
       <div
-        className="mt-6 rounded-[14px] p-4 text-[#302c2c] shadow-[0_18px_45px_-28px_rgba(0,0,0,0.75)] sm:p-5"
+        className="mt-6 rounded-[14px] p-4 text-ink shadow-[0_18px_45px_-28px_rgba(0,0,0,0.75)] sm:p-5"
         style={{ backgroundColor: CARD }}
       >
-        <div className="flex items-center justify-between gap-3 border-b border-[#ddd9d6] pb-3">
+        <div className="flex items-center justify-between gap-3 border-b border-mist pb-3">
           <div className="flex -space-x-1.5" aria-hidden>
             {panel.roster.map((name, index) =>
               name === 'ola' ? (
@@ -156,8 +147,8 @@ function ChatPanel({ panel }: { panel: Panel }) {
                   className="flex h-7 w-7 items-center justify-center rounded-full border-2 text-[10px] font-medium"
                   style={
                     index === 0
-                      ? { borderColor: CARD, backgroundColor: accent.bubble, color: accent.bubbleInk }
-                      : { borderColor: CARD, backgroundColor: '#e7e2dc', color: '#575555' }
+                      ? { borderColor: CARD, ...BUBBLE }
+                      : { borderColor: CARD, backgroundColor: 'var(--color-mist)', color: 'var(--color-charcoal)' }
                   }
                 >
                   {name}
@@ -165,13 +156,13 @@ function ChatPanel({ panel }: { panel: Panel }) {
               ),
             )}
           </div>
-          <span className="text-[11px] text-[#706e6d]">{panel.rosterMeta}</span>
+          <span className="text-[11px] text-ash">{panel.rosterMeta}</span>
         </div>
 
         <div className="mt-4 space-y-3">
           <p
             className="ml-auto w-fit max-w-[88%] rounded-[10px] px-3 py-2 text-[13px]"
-            style={{ backgroundColor: accent.bubble, color: accent.bubbleInk }}
+            style={BUBBLE}
           >
             {panel.ask}
           </p>
@@ -180,8 +171,9 @@ function ChatPanel({ panel }: { panel: Panel }) {
             <span className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full">
               <OlaAvatar className="h-full w-full" />
             </span>
-            <div className="min-w-0 flex-1 rounded-[10px] border border-[#d9d5d2] bg-white px-3 py-2.5">
-              <p className="text-[11px] font-medium text-[#15315b]">Ola</p>
+            <div className="min-w-0 flex-1 rounded-[10px] border border-mist bg-paper px-3 py-2.5">
+              {/* navy-lit at night: #15315b on the dark card is 1.4:1. */}
+              <p className="text-[11px] font-medium text-[var(--color-navy)] dark:text-[var(--color-navy-lit)]">Ola</p>
               <p className="mt-1 text-[13px] leading-[1.5]">{panel.reply}</p>
             </div>
           </div>
@@ -192,7 +184,7 @@ function ChatPanel({ panel }: { panel: Panel }) {
               the section is claiming. */}
           <div
             className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-[12px]"
-            style={{ backgroundColor: accent.strip, color: accent.stripInk }}
+            style={STRIP}
           >
             {panel.strip.icon === 'lock' ? <LockMark /> : <PersonMark />}
             {panel.strip.label}

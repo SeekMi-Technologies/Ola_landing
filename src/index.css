@@ -189,6 +189,42 @@
   }
 }
 
+/* The two chat mock-ups' channel tints. They live here rather than as
+   hexes in the component because inline styles cannot carry a media
+   query, and at night the pale blue/beige bubbles were the brightest
+   thing left on the page: #e4edfa measures 236 in luminance, on a card
+   that is now 32. Same hue on both sides of the theme, inverted weight —
+   pale tint with dark ink by day, deep tint with light ink at night. */
+.chat-channel {
+  --chat-bubble: #d5e2f4;
+  --chat-bubble-ink: #16325c;
+  --chat-strip: #e4edfa;
+  --chat-strip-ink: #2b4b7d;
+}
+
+.chat-private {
+  --chat-bubble: #e6dfd5;
+  --chat-bubble-ink: #4a423a;
+  --chat-strip: #efe9e1;
+  --chat-strip-ink: #5c554c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .chat-channel {
+    --chat-bubble: #1f3a63;
+    --chat-bubble-ink: #cfe0fb;
+    --chat-strip: #1b2f4d;
+    --chat-strip-ink: #a8c2ea;
+  }
+
+  .chat-private {
+    --chat-bubble: #3a332b;
+    --chat-bubble-ink: #e6dcd0;
+    --chat-strip: #2e2922;
+    --chat-strip-ink: #cfc4b6;
+  }
+}
+
 /* Pins its subtree to the light palette. The Feishu mockup depicts that
    app's LIGHT theme — its message-card status tints are fixed light
    values, so letting the surrounding tokens invert would leave pale
