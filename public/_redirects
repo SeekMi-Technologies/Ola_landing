@@ -1,5 +1,11 @@
-# No SPA fallback any more: the build prerenders a real HTML file for every
-# route, so /pricing is dist/pricing/index.html rather than the shell with
-# the router deciding afterwards. Anything unmatched falls through to
-# 404.html, which the build also writes — a genuine 404 status instead of a
-# 200 that renders a "page not found" body.
+# English lives at the root, Chinese under /zh. /en was never a real tree —
+# it 404s — but links in that shape may be out there, so they land on the
+# English page they were meant for rather than on the 404.
+/en           /          301!
+/en/*         /:splat    301!
+
+# No SPA fallback: the build prerenders a real HTML file for every route, so
+# /pricing is dist/pricing/index.html rather than the shell with the router
+# deciding afterwards. Anything unmatched falls through to 404.html, which
+# the build also writes — a genuine 404 status instead of a 200 that renders
+# a "page not found" body.
