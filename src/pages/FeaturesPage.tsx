@@ -219,7 +219,12 @@ function Manage() {
 
         <div className="mt-4 flex flex-wrap items-center gap-x-7 gap-y-4 rounded-[var(--radius-card)] bg-paper px-7 py-6 shadow-[var(--shadow-sm)] md:mt-5">
           <p className="text-[14px] text-ink/55">{MANAGE.toolsLead}</p>
-          <div className="flex flex-wrap items-center gap-5 sm:gap-6">
+          {/* A grid, not flex-wrap: with 12 marks, wrapping by width left a
+              ragged last row that changed with the phone — 5/5/2 at 375,
+              4/4/4 at 360. Twelve divides by 4 and by 6, so every row is
+              full at either column count. Free wrapping again from md,
+              where the strip sits on one line beside its label. */}
+          <div className="grid w-full grid-cols-4 place-items-center gap-5 sm:w-auto sm:grid-cols-6 sm:gap-6 md:flex md:flex-wrap md:items-center">
             {MANAGE.tools.map((tool) => (
               <ToolMark key={tool.name} tool={tool} />
             ))}

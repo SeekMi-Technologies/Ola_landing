@@ -120,7 +120,11 @@ export default function Control() {
               </div>
 
               <div className="mt-5 max-w-[500px] sm:mt-6">
-                <h3 className="whitespace-nowrap text-[clamp(27px,3vw,34px)] font-medium leading-[1.12] tracking-[-0.025em] text-white">
+                {/* No `whitespace-nowrap`: it held the Chinese to one line,
+                    but "Confirm first. Then act." is 384px at this size and
+                    pushed 73px of the page off the side of a phone. Both
+                    languages wrap now, balanced. */}
+                <h3 className="text-balance text-[clamp(27px,3vw,34px)] font-medium leading-[1.12] tracking-[-0.025em] text-white">
                   先确认，再执行。
                 </h3>
               </div>
@@ -135,7 +139,7 @@ export default function Control() {
             <div className="flex items-start justify-between gap-5">
               <div>
                 <p className="t-caption-cn text-clay">默认最小权限</p>
-                <h3 className="mt-2.5 whitespace-nowrap text-[clamp(20px,3.4vw,28px)] font-medium leading-[1.18] tracking-[-0.02em] text-ink">
+                <h3 className="mt-2.5 text-balance text-[clamp(20px,3.4vw,28px)] font-medium leading-[1.18] tracking-[-0.02em] text-ink">
                   你看不到的，Ola 也看不到。
                 </h3>
               </div>
