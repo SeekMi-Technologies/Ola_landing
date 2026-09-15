@@ -19,7 +19,10 @@
  * Non-page requests (assets, the .md and .txt files themselves, the /en
  * redirect tree) never enter this file — see `config.matcher`.
  */
-import { next, rewrite } from '@vercel/functions'
+/* The subpath, not the package root: the root re-exports the Node-only
+   helpers (OIDC, database pooling, a dynamic require) and the edge bundler
+   refuses them. `middleware.js` is just next() and rewrite(). */
+import { next, rewrite } from '@vercel/functions/middleware'
 
 import { negotiate } from './src/agent/negotiate.ts'
 import { NOT_FOUND_MARKDOWN } from './src/agent/notFound.ts'
