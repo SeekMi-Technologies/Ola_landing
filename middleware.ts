@@ -1,5 +1,6 @@
 /**
- * Vercel Routing Middleware — runs at the edge before the filesystem.
+ * Vercel Routing Middleware — runs before the filesystem, on every request
+ * the matcher lets through.
  *
  * One job: content negotiation over `Accept`, so an agent that asks for
  * Markdown gets the Markdown twin the build wrote next to every page, and
@@ -19,15 +20,18 @@
  * Non-page requests (assets, the .md and .txt files themselves, the /en
  * redirect tree) never enter this file — see `config.matcher`.
  */
-/* The subpath, not the package root: the root re-exports the Node-only
-   helpers (OIDC, database pooling, a dynamic require) and the edge bundler
-   refuses them. `middleware.js` is just next() and rewrite(). */
+/* The subpath, not the package root: `middleware.js` is just next() and
+   rewrite(), without the OIDC and database helpers the root also exports. */
 import { next, rewrite } from '@vercel/functions/middleware'
 
-import { negotiate } from './src/agent/negotiate.ts'
-import { NOT_FOUND_MARKDOWN } from './src/agent/notFound.ts'
-import { canonicalPath, isKnownPage, markdownPathFor } from './src/agent/pages.ts'
-import { SITE_URL } from './src/agent/site.ts'
+/* `.js` on relative imports, resolving to the .ts sources: Vercel checks
+   this file with moduleResolution node16, which insists on an extension
+   and rejects `.ts`. Vite and tsx both map `.js` back to the `.ts`. */
+
+import { negotiate } from './src/agent/negotiate.js'
+import { NOT_FOUND_MARKDOWN } from './src/agent/notFound.js'
+import { canonicalPath, isKnownPage, markdownPathFor } from './src/agent/pages.js'
+import { SITE_URL } from './src/agent/site.js'
 
 const HTML = 'text/html'
 const MARKDOWN = 'text/markdown'
@@ -89,6 +93,9 @@ export default function middleware(request: Request) {
 }
 
 export const config = {
+  /* Node, not the (deprecated) edge runtime — Vercel's current default
+     recommendation, and nothing here needs an edge-only API. */
+  runtime: 'nodejs',
   /* Page paths only. Everything with a file extension — the client bundle,
      images, the .md twins, llms.txt, robots.txt, sitemap.xml — and the
      /en redirect tree bypass negotiation entirely. */

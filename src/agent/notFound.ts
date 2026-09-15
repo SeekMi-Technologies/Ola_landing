@@ -7,7 +7,7 @@
  * that do exist. The build also writes it to dist/404.md so the two copies
  * come from one string.
  */
-import { SITE_URL } from './site.ts'
+import { SITE_URL } from './site.js'
 
 export const NOT_FOUND_MARKDOWN = `# Not found
 

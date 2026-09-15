@@ -6,7 +6,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
-import { negotiate, parseAccept, quality } from '../src/agent/negotiate.ts'
+import { negotiate, parseAccept, quality } from '../src/agent/negotiate'
 
 const MD = 'text/markdown'
 const HTML = 'text/html'

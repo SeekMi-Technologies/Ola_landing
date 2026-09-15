@@ -8,9 +8,9 @@ import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { test } from 'node:test'
 
-import { PAGES, markdownPathFor } from '../src/agent/pages.ts'
-import { NOT_FOUND_MARKDOWN } from '../src/agent/notFound.ts'
-import { SITE_URL } from '../src/agent/site.ts'
+import { PAGES, markdownPathFor } from '../src/agent/pages'
+import { NOT_FOUND_MARKDOWN } from '../src/agent/notFound'
+import { SITE_URL } from '../src/agent/site'
 
 const dist = join(import.meta.dirname, '..', 'dist')
 const read = (path: string) => readFileSync(join(dist, path), 'utf8')

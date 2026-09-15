@@ -7,8 +7,8 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
-import middleware, { config } from '../middleware.ts'
-import { NOT_FOUND_MARKDOWN } from '../src/agent/notFound.ts'
+import middleware, { config } from '../middleware'
+import { NOT_FOUND_MARKDOWN } from '../src/agent/notFound'
 
 const request = (path: string, accept?: string) =>
   new Request(`https://olatech.ai${path}`, { headers: accept === undefined ? {} : { accept } })

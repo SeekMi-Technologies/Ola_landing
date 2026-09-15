@@ -6,7 +6,7 @@
  *
  * Pure: no React, no DOM. The middleware bundles it for the edge.
  */
-import { INDEXABLE_ROUTES, pathForLanguage, type SiteLanguage } from '../routes.ts'
+import { INDEXABLE_ROUTES, pathForLanguage, type SiteLanguage } from '../routes.js'
 
 const ENGLISH_PAGES: string[] = [
   ...INDEXABLE_ROUTES.map((route) => (route === 'home' ? '/' : `/${route}`)),

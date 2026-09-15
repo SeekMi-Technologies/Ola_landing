@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
-import { PAGES, canonicalPath, isKnownPage, markdownPathFor, languageOfPath } from '../src/agent/pages.ts'
+import { PAGES, canonicalPath, isKnownPage, markdownPathFor, languageOfPath } from '../src/agent/pages'
 
 test('both language trees are listed, English first', () => {
   assert.deepEqual(PAGES.slice(0, 2), ['/', '/zh'])
