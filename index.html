@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/ola-favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="describedby" type="text/plain" href="/llms.txt" />
     <meta name="theme-color" content="#f6f4f2" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1a1917" media="(prefers-color-scheme: dark)" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -43,8 +44,16 @@
             "@id": "https://olatech.ai/#organization",
             "name": "Ola",
             "url": "https://olatech.ai/",
+            "description": "Ola makes an AI teammate that lives inside Feishu, Lark and WhatsApp with its own account and permissions, and does work in the tools a team already uses.",
             "logo": "https://olatech.ai/apple-touch-icon.png",
             "email": "duke@olatech.ai",
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "sales",
+              "email": "duke@olatech.ai",
+              "url": "https://olatech.ai/contact",
+              "availableLanguage": ["en", "zh-CN"]
+            },
             "sameAs": [
               "https://www.linkedin.com/company/olatech-ai/",
               "https://x.com/useola_ai"
@@ -55,19 +64,24 @@
             "@id": "https://olatech.ai/#website",
             "url": "https://olatech.ai/",
             "name": "Ola",
+            "description": "Ola is the teammate that gets work done across the tools your team already uses.",
             "inLanguage": ["en", "zh-CN"],
             "publisher": { "@id": "https://olatech.ai/#organization" }
           },
           {
             "@type": "SoftwareApplication",
+            "@id": "https://olatech.ai/#app",
             "name": "Ola",
+            "url": "https://olatech.ai/",
+            "description": "An AI teammate for Feishu, Lark and WhatsApp. @-mention it with a task; it does the work in GitHub, Notion, Langfuse and Feishu docs and tables within your permissions, and reports back in the same thread.",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web, Feishu, Lark, WhatsApp",
+            "inLanguage": ["en", "zh-CN"],
             "publisher": { "@id": "https://olatech.ai/#organization" },
             "offers": [
-              { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD" },
-              { "@type": "Offer", "name": "Pro", "price": "20", "priceCurrency": "USD" },
-              { "@type": "Offer", "name": "Max", "price": "100", "priceCurrency": "USD" }
+              { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD", "url": "https://olatech.ai/pricing" },
+              { "@type": "Offer", "name": "Pro", "price": "20", "priceCurrency": "USD", "url": "https://olatech.ai/pricing" },
+              { "@type": "Offer", "name": "Max", "price": "100", "priceCurrency": "USD", "url": "https://olatech.ai/pricing" }
             ]
           }
         ]

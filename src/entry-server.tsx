@@ -2,19 +2,16 @@ import { renderToString } from 'react-dom/server'
 
 import App from './App'
 import { I18nProvider, localizeMarkup } from './i18n'
-import { INDEXABLE, headTagsFor } from './components/Seo'
-import { languageForPath, pathForLanguage, routeFor } from './routes'
+import { COPY, headTagsFor } from './components/Seo'
+import { languageForPath, routeFor } from './routes'
 
-/* The routes the build writes a file for. The indexable five plus /login,
-   which is a real page people are sent to, and the 404 body that a host
-   can serve for anything else. Both carry noindex from headTagsFor. */
-const ENGLISH_PAGES: string[] = [...INDEXABLE.map((route) =>
-  route === 'home' ? '/' : `/${route}`,
-), '/login']
-export const PAGES: string[] = ENGLISH_PAGES.flatMap((path) => [
-  path,
-  pathForLanguage(path, 'zh-CN'),
-])
+/* The page list lives in src/agent/pages.ts so the edge middleware, the
+   prerender and the tests all read the same one. Re-exported here, with
+   the other pieces the prerender script needs, because that script only
+   imports this bundle. */
+export { PAGES, markdownPathFor } from './agent/pages'
+export { NOT_FOUND_MARKDOWN } from './agent/notFound'
+export { SITE_URL } from './agent/site'
 
 export function render(path: string) {
   const route = routeFor(path)
@@ -27,6 +24,7 @@ export function render(path: string) {
   return {
     html: localizeMarkup(sourceMarkup, language),
     language,
+    description: COPY[language][route].description,
     ...headTagsFor(route, path, language),
   }
 }

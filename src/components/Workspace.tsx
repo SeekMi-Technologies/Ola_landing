@@ -127,6 +127,7 @@ function ChatPanel({ panel }: { panel: Panel }) {
       {/* No min-height: it was 284px against ~255px of content, which is
           the blank band that used to sit under the closing strip. */}
       <div
+        data-agent-skip
         className="mt-6 rounded-[14px] p-4 text-ink shadow-[0_18px_45px_-28px_rgba(0,0,0,0.75)] sm:p-5"
         style={{ backgroundColor: CARD }}
       >

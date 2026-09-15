@@ -160,7 +160,7 @@ function Faqs() {
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                     className="group flex w-full items-center gap-4 px-5 py-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-signal/30 focus-visible:ring-inset"
                   >
-                    <span className="t-caption hidden shrink-0 text-ash sm:block">
+                    <span className="t-caption hidden shrink-0 text-ash sm:block" aria-hidden>
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <span className="flex-1 text-[16px] font-medium leading-[1.45] tracking-[-0.01em] text-ink">

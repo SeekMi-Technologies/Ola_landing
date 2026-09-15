@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 
 import { useI18n } from '../i18nContext'
-import { pathForLanguage, type Route } from '../routes'
+import { INDEXABLE_ROUTES, pathForLanguage, type Route } from '../routes'
+import { markdownPathFor } from '../agent/pages'
 
 type Copy = { title: string; description: string }
 
@@ -76,7 +77,7 @@ export const SITE_URL = (
   (typeof window === 'undefined' ? 'https://olatech.ai' : window.location.origin)
 ).replace(/\/$/, '')
 
-export const INDEXABLE: Route[] = ['home', 'product', 'integrations', 'pricing', 'contact']
+export const INDEXABLE: Route[] = INDEXABLE_ROUTES
 
 function escapeAttribute(value: string) {
   return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
@@ -120,6 +121,13 @@ export function headTagsFor(route: Route, path: string, language: 'en' | 'zh-CN'
       `<link rel="alternate" hreflang="en" href="${escapeAttribute(englishUrl)}" />`,
       `<link rel="alternate" hreflang="zh-CN" href="${escapeAttribute(chineseUrl)}" />`,
       `<link rel="alternate" hreflang="x-default" href="${escapeAttribute(englishUrl)}" />`,
+      /* The Markdown twin, per llmstxt.org and acceptmarkdown.com. Only
+         real pages have one; the 404 does not advertise a file it lacks. */
+      ...(route === 'notFound'
+        ? []
+        : [
+            `<link rel="alternate" type="text/markdown" href="${escapeAttribute(`${SITE_URL}${markdownPathFor(canonicalPath)}`)}" />`,
+          ]),
       ...meta.map(
         ([attribute, key, content]) =>
           `<meta ${attribute}="${key}" content="${escapeAttribute(content)}" />`,
