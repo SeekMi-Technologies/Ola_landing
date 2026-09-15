@@ -564,7 +564,15 @@ export default function FeishuDemo() {
             `flex-1` only from md. Below that the parent is a column, where
             `flex: 1 1 0%` takes the main axis off `height` and let the panel
             grow — measured 754px against the 500 it is meant to be. */}
-        <div className="hidden h-[420px] w-full min-w-0 overflow-hidden rounded-[var(--radius-card)] bg-paper shadow-[0_20px_50px_-24px_rgba(24,23,23,0.45)] sm:flex sm:h-[500px] md:w-auto md:flex-1">
+        {/* data-agent-skip: the Markdown twin of this page leaves the
+            window out. It is a fictional chat transcript drawn to show the
+            product's shape; to an agent reading the page as text it would
+            read as facts about real people and real numbers. The prompt
+            and the explanation beside it stay in. */}
+        <div
+          data-agent-skip
+          className="hidden h-[420px] w-full min-w-0 overflow-hidden rounded-[var(--radius-card)] bg-paper shadow-[0_20px_50px_-24px_rgba(24,23,23,0.45)] sm:flex sm:h-[500px] md:w-auto md:flex-1"
+        >
           <Rail />
 
           <div className="flex min-w-0 flex-1 flex-col">

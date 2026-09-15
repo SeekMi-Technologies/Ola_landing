@@ -235,7 +235,8 @@ export default function HowItWorks() {
               <div className="mb-5">{StepArt[s.art]}</div>
 
               <div className="flex items-baseline gap-2.5">
-                <span className="font-mono text-[13px] font-medium text-signal">
+                {/* Decorative: the <ol> already numbers the steps. */}
+                <span className="font-mono text-[13px] font-medium text-signal" aria-hidden>
                   {s.n}
                 </span>
                 <span className="t-caption-cn text-ash">{s.label}</span>

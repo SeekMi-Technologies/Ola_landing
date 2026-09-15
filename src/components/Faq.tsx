@@ -41,7 +41,7 @@ export default function Faq() {
                   >
                     {/* Inline prefix rather than a fixed 88px column — at
                         half width that column left no room for the question. */}
-                    <span className="t-caption hidden shrink-0 text-ash sm:block">
+                    <span className="t-caption hidden shrink-0 text-ash sm:block" aria-hidden>
                       {String(index + 1).padStart(2, '0')}
                     </span>
 

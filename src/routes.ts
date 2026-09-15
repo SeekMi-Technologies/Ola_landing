@@ -16,6 +16,11 @@
 export type Route = 'home' | 'integrations' | 'pricing' | 'product' | 'login' | 'contact' | 'notFound'
 export type SiteLanguage = 'en' | 'zh-CN'
 
+/** The routes search engines may index. /login and the 404 exist but carry
+ *  noindex. Lives here, not in Seo.tsx, so the edge middleware can import
+ *  it without dragging React along. */
+export const INDEXABLE_ROUTES: Route[] = ['home', 'product', 'integrations', 'pricing', 'contact']
+
 const PATHS: Record<string, Route> = {
   '/integrations': 'integrations',
   '/pricing': 'pricing',
