@@ -1023,5 +1023,8 @@ export const ENGLISH: Record<string, string> = {
   '链接可能过期了，或者地址打错了。下面几个地方大概是你要找的。':
     'The link may have expired, or the address is off by a character. One of these is probably what you were after.',
   '回首页': 'Back to home',
+  '完整的页面清单在': 'The full list of pages is in the ',
+  '站点地图': 'site map',
+  '；给 AI 助手的说明在': '; the notes for AI assistants are in ',
   '看功能': 'See what it does',
 }

@@ -61,6 +61,10 @@ test('every page links its Markdown twin and llms.txt from <head>', () => {
 test('404: real body, noindex, a Markdown twin, no alternate to a file that does not exist', () => {
   const html = read('404.html')
   assert.ok(html.includes('name="robots" content="noindex, nofollow"'))
+  /* The HTML 404 points at the same two files the Markdown one does, for a
+     reader that arrived with a plain GET. */
+  assert.ok(html.includes('href="/sitemap.xml"'), '404.html does not link the site map')
+  assert.ok(html.includes('href="/llms.txt"'), '404.html does not link llms.txt')
   assert.ok(!html.includes('type="text/markdown"'))
   assert.equal(read('404.md'), NOT_FOUND_MARKDOWN)
   assert.match(NOT_FOUND_MARKDOWN, /^# Not found/)

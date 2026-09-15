@@ -25,6 +25,22 @@ export default function NotFoundPage() {
             联系我们
           </a>
         </div>
+
+        {/* For whatever is reading this without a browser: the two files
+            that describe the whole site. A crawler or agent that lands here
+            with a plain GET sees HTML, so the pointers 404.md carries have
+            to be in the HTML as well. */}
+        <p className="shell mt-10 text-[13px] leading-[1.7] text-ink/45">
+          完整的页面清单在
+          <a href="/sitemap.xml" className="underline underline-offset-2 hover:text-ink">
+            站点地图
+          </a>
+          ；给 AI 助手的说明在
+          <a href="/llms.txt" className="underline underline-offset-2 hover:text-ink">
+            llms.txt
+          </a>
+          。
+        </p>
       </section>
     </main>
   )
