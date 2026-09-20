@@ -27,7 +27,7 @@ export default function Faq() {
             return (
               <article
                 key={item.q}
-                className={`overflow-hidden rounded-[var(--radius-card)] border bg-paper shadow-[var(--shadow-sm)] transition-colors duration-200 ${
+                className={`overflow-hidden rounded-[var(--radius-card)] border bg-paper shadow-[var(--shadow-sm)] transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none hover:shadow-[0_4px_14px_rgba(24,23,23,0.07)] focus-within:shadow-[0_4px_14px_rgba(24,23,23,0.07)] ${
                   isOpen ? 'border-ink/20' : 'border-mist/55 hover:border-ink/15'
                 }`}
               >
@@ -58,7 +58,7 @@ export default function Faq() {
                         strokes have no such offset, and they rotate to a
                         clean × as well. */}
                     <span
-                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-[var(--color-on-ink)] transition-transform duration-200 group-hover:bg-signal ${
+                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-[var(--color-on-ink)] transition-transform duration-200 motion-reduce:transition-none group-hover:bg-signal ${
                         isOpen ? 'rotate-45 bg-signal' : ''
                       }`}
                       aria-hidden
@@ -79,7 +79,8 @@ export default function Faq() {
 
                 <div
                   id={answerId}
-                  className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                  aria-hidden={!isOpen}
+                  className={`grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${
                     isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
                   }`}
                 >

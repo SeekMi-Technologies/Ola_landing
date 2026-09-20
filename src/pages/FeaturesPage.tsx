@@ -80,7 +80,7 @@ function Catalogue() {
               <a
                 key={group.name}
                 href={`#cap-${i}`}
-                className="inline-flex items-center gap-2 rounded-full border border-mist bg-paper px-3.5 py-1.5 text-[13px] font-medium text-ink/70 transition-colors hover:border-ink/25 hover:text-ink"
+                className="inline-flex items-center gap-2 rounded-full border border-mist bg-paper px-3.5 py-1.5 text-[13px] font-medium text-ink/70 motion-safe:transition-colors hover:border-ink/25 hover:bg-linen hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
               >
                 {group.name}
                 {/* Its own node, so the group name stays one whole string for
@@ -97,7 +97,7 @@ function Catalogue() {
               key={group.name}
               id={`cap-${i}`}
               /* scroll-mt clears the 66px sticky bar plus a little air. */
-              className="grid scroll-mt-[86px] gap-6 rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)] sm:p-9 lg:grid-cols-[260px_1fr] lg:gap-10"
+              className="motion-info-card grid scroll-mt-[86px] gap-6 rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)] sm:p-9 lg:grid-cols-[260px_1fr] lg:gap-10"
             >
               <div>
                 <svg viewBox="0 0 96 64" className="h-16 w-24" aria-hidden>
@@ -204,7 +204,7 @@ function Manage() {
           {MANAGE.cards.map((c) => (
             <article
               key={c.title}
-              className="rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)]"
+              className="motion-info-card rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)]"
             >
               <svg viewBox="0 0 96 64" className="h-16 w-24" aria-hidden>
                 {ADMIN_ART[c.art]}
@@ -217,7 +217,7 @@ function Manage() {
           ))}
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-x-7 gap-y-4 rounded-[var(--radius-card)] bg-paper px-7 py-6 shadow-[var(--shadow-sm)] md:mt-5">
+        <div className="motion-info-card mt-4 flex flex-wrap items-center gap-x-7 gap-y-4 rounded-[var(--radius-card)] bg-paper px-7 py-6 shadow-[var(--shadow-sm)] md:mt-5">
           <p className="text-[14px] text-ink/55">{MANAGE.toolsLead}</p>
           {/* A grid, not flex-wrap: with 12 marks, wrapping by width left a
               ragged last row that changed with the phone — 5/5/2 at 375,
@@ -247,7 +247,7 @@ function Quotes() {
           {QUOTES.map((q) => (
             <figure
               key={q.quote}
-              className="flex flex-col justify-between rounded-[var(--radius-card)] bg-paper p-8 shadow-[var(--shadow-sm)]"
+              className="motion-info-card flex flex-col justify-between rounded-[var(--radius-card)] bg-paper p-8 shadow-[var(--shadow-sm)]"
             >
               <blockquote className="text-[19px] leading-[1.5] tracking-[-0.015em] text-ink text-pretty">
                 “{q.quote}”

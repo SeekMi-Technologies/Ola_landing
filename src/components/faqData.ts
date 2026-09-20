@@ -19,7 +19,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Ola 在哪些地方可以用？',
-    a: '飞书、Lark 和 WhatsApp。国内团队用飞书，香港及海外团队用 Lark，两条路径的能力完全一致。WhatsApp 配对一次之后，私聊、群聊、发语音、传录音都可以，和飞书里是同一个 Ola——权限、记忆、任务全部打通。',
+    a: '在飞书、Lark、WhatsApp、Slack 和 Microsoft Teams 都可以使用 Ola。飞书与 Lark 的接入能力一致；WhatsApp 支持私聊、群聊、语音与录音。Slack 和 Teams 也已上线，具体能力和接入状态可在集成页面查看。',
   },
   {
     q: 'Ola 能连接哪些工具？',

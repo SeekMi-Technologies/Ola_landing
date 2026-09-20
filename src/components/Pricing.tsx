@@ -151,7 +151,7 @@ const PAID: Plan[] = [
 
 function PlanCard({ plan, className = '' }: { plan: Plan; className?: string }) {
   return (
-    <div className={`flex flex-col bg-paper p-8 sm:p-9 ${className}`}>
+    <div className={`motion-pricing-card flex flex-col bg-paper p-8 sm:p-9 ${className}`}>
       <div className="flex items-center justify-between gap-4">
         <h3 className="text-[32px] font-medium leading-[48px] tracking-[-0.02em] text-ink">
           {plan.name}
@@ -176,7 +176,7 @@ function PlanCard({ plan, className = '' }: { plan: Plan; className?: string }) 
         </p>
         <a
           href="/contact"
-          className={`mt-6 block rounded-[var(--radius-btn)] py-2.5 text-center text-[16px] font-medium tracking-[-0.01em] transition-colors ${
+          className={`motion-pricing-cta mt-6 block rounded-[var(--radius-btn)] py-2.5 text-center text-[16px] font-medium tracking-[-0.01em] transition-colors ${
             plan.ctaStyle === 'muted'
               ? 'bg-mist/60 text-ink hover:bg-mist'
               : 'bg-ink text-[var(--color-on-ink)] hover:bg-graphite'

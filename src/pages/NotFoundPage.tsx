@@ -15,13 +15,13 @@ export default function NotFoundPage() {
 
       <section className="bg-bone pb-16 pt-12 md:pb-24 md:pt-16">
         <div className="shell flex flex-wrap items-center gap-4">
-          <a href="/" className="btn btn-primary">
+          <a href="/" className="btn btn-primary focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-signal">
             回首页
           </a>
-          <a href="/product" className="btn btn-ghost">
+          <a href="/product" className="btn btn-ghost focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-signal">
             看功能
           </a>
-          <a href="/contact" className="btn btn-ghost">
+          <a href="/contact" className="btn btn-ghost focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-signal">
             联系我们
           </a>
         </div>

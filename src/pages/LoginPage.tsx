@@ -74,6 +74,7 @@ export default function LoginPage() {
               type="text"
               value={slug}
               onChange={(event) => setSlug(toSlug(event.target.value))}
+              aria-describedby="team-url-help"
               placeholder={LOGIN.placeholder}
               autoComplete="off"
               autoCapitalize="off"
@@ -84,8 +85,11 @@ export default function LoginPage() {
               {SUFFIX}
             </span>
           </div>
+          <span id="team-url-help" className="sr-only" data-i18n-ignore>
+            {language === 'en' ? `Enter the part before ${SUFFIX}` : `输入 ${SUFFIX} 前面的团队名称`}
+          </span>
 
-          <button type="submit" disabled={!slug} className="login-submit mt-4 h-9 w-full text-[14px] font-medium">
+          <button type="submit" disabled={!slug} className="login-submit mt-4 h-9 w-full text-[14px] font-medium disabled:opacity-55">
             {LOGIN.cta}
           </button>
         </form>
@@ -93,10 +97,10 @@ export default function LoginPage() {
 
       <div className="mt-5 flex flex-wrap items-center justify-center gap-2" data-i18n-ignore>
         <div className="login-switch" role="group" aria-label={language === 'en' ? 'Language' : '语言'}>
-          <a href="/zh/login" data-locale-link className="login-switch-option" aria-current={language === 'zh-CN' ? 'page' : undefined} lang="zh-CN">
+          <a href="/zh/login" data-locale-link className="login-switch-option focus-visible:relative focus-visible:z-10" aria-current={language === 'zh-CN' ? 'page' : undefined} lang="zh-CN">
             中文
           </a>
-          <a href="/login" data-locale-link className="login-switch-option" aria-current={language === 'en' ? 'page' : undefined} lang="en">
+          <a href="/login" data-locale-link className="login-switch-option focus-visible:relative focus-visible:z-10" aria-current={language === 'en' ? 'page' : undefined} lang="en">
             EN
           </a>
         </div>
@@ -109,7 +113,7 @@ export default function LoginPage() {
             <button
               key={option.id}
               type="button"
-              className="login-switch-option login-icon-button"
+              className="login-switch-option login-icon-button focus-visible:relative focus-visible:z-10"
               aria-label={option.label}
               aria-pressed={theme === option.id}
               onClick={() => setTheme(option.id)}
@@ -122,7 +126,7 @@ export default function LoginPage() {
 
       <p className="login-muted mt-6 text-center text-[13px] leading-[1.5]">
         {LOGIN.helpLead}
-        <a href="/contact" className="ml-1 underline underline-offset-2 hover:text-current">
+        <a href="/contact" className="ml-1 rounded-sm underline underline-offset-2 hover:text-current focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3370ff]">
           {LOGIN.helpLink}
         </a>
       </p>

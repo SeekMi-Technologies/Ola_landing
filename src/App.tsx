@@ -66,7 +66,7 @@ export default function App({ initialPath }: { initialPath?: string } = {}) {
     return (
       <>
         <Seo route={route} />
-        <Nav />
+        <Nav route={route} />
         <Page />
         <Footer />
       </>
@@ -76,7 +76,7 @@ export default function App({ initialPath }: { initialPath?: string } = {}) {
   return (
     <>
       <Seo route={route} />
-      <Nav />
+      <Nav route={route} />
       {/* Product story: demo → workflow → collaboration → capabilities →
           control → integrations → pricing → FAQ. */}
       <main>

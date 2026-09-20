@@ -184,7 +184,7 @@ export default function Integrations() {
             部分应用正在接入中，
             <a
               href="/integrations"
-              className="underline underline-offset-2 transition-colors hover:text-ink"
+              className="rounded-sm underline underline-offset-2 transition-colors hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-signal"
             >
               查看每个工具的状态
             </a>

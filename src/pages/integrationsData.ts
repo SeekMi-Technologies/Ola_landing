@@ -7,6 +7,8 @@
  * both — a full-colour mark reads on either ground, which is why most
  * entries carry one file. See public/logos/README.md.
  */
+import { ENGLISH } from '../translations'
+
 export type Integration = {
   name: string
   category: CategoryId
@@ -74,13 +76,12 @@ export const INTEGRATIONS: Integration[] = [
     blurb: '配对一次，语音和录音都能发',
     logo: '/logos/whatsapp.webp',
   },
-  { name: 'Slack', category: 'chat', blurb: '频道里 @ 他，结果回到频道', logo: '/logos/slack.webp', comingSoon: true },
+  { name: 'Slack', category: 'chat', blurb: '频道里 @ 他，结果回到频道', logo: '/logos/slack.webp' },
   {
     name: 'Microsoft Teams',
     category: 'chat',
     blurb: '和飞书里是同一个 Ola',
     logo: '/logos/microsoft-teams.webp',
-    comingSoon: true,
   },
   {
     name: 'GitHub',
@@ -135,3 +136,18 @@ export const INTEGRATIONS: Integration[] = [
     comingSoon: true,
   },
 ]
+
+/** Match both languages because the displayed copy is localized after render.
+ *  Searching only the Chinese source made visible English blurbs unsearchable. */
+export function matchesIntegrationQuery(item: Integration, query: string) {
+  const needle = query.trim().toLowerCase()
+  if (!needle) return true
+  const category = CATEGORIES.find((entry) => entry.id === item.category)!
+  return [
+    item.name,
+    item.blurb,
+    ENGLISH[item.blurb] ?? '',
+    category.name,
+    ENGLISH[category.name] ?? '',
+  ].some((text) => text.toLowerCase().includes(needle))
+}

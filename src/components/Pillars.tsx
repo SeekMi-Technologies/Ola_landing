@@ -121,7 +121,7 @@ export default function Pillars() {
           {CARDS.map((c) => (
             <article
               key={c.title}
-              className="rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)]"
+              className="motion-info-card rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)]"
             >
               <svg viewBox="0 0 96 64" className="h-16 w-24" aria-hidden>
                 {ART[c.art]}
