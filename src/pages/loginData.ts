@@ -1,19 +1,11 @@
-/**
- * /login copy.
- *
- * Chinese is the source; English comes from src/translations.ts. The help
- * line is split into a lead and a link label because the walker matches
- * whole text nodes — written as one sentence with an <a> in the middle it
- * would be three nodes and none of them would translate.
- */
+/* Landing's first sign-in step finds the team workspace; credentials are
+   entered only after the visitor reaches that workspace. */
 export const LOGIN = {
-  title: '进入你们团队的工作区',
-  /* The line under the heading, the way the workspace's own sign-in card
-     carries one. */
-  lead: '输入公司的 Ola 网址',
-  fieldLabel: '公司网址',
+  title: '登录',
+  lead: '输入团队的 Ola 网址，继续登录。',
+  fieldLabel: '团队网址',
   placeholder: 'your-team',
-  cta: '继续',
-  helpLead: '不知道网址？',
+  cta: '继续登录',
+  helpLead: '不知道团队网址？',
   helpLink: '联系我们',
 }

@@ -796,12 +796,11 @@ export const ENGLISH: Record<string, string> = {
   '团队规模': 'Team size',
   '待补充': 'To be added',
 
-  /* /login — the workspace-URL step */
-  '继续': 'Continue',
-  '进入你们团队的工作区': 'Go to your team\u2019s workspace',
-  '输入公司的 Ola 网址': 'Enter your company\u2019s Ola URL',
-  '公司网址': 'Company URL',
-  '不知道网址？': 'Do not know the URL? ',
+  /* /login — visual match to product sign-in, with the workspace handoff intact */
+  '输入团队的 Ola 网址，继续登录。': 'Enter your team\u2019s Ola URL to continue.',
+  '团队网址': 'Team URL',
+  '继续登录': 'Continue to sign in',
+  '不知道团队网址？': 'Do not know your team URL?',
 
   /* /contact, the three onward cards — the top bar's own destinations */
   '他能接哪些活，完整的一份清单。': 'Everything he can take on, the whole list.',

@@ -87,13 +87,17 @@ export function localizeMarkup(markup: string, language: Language) {
       )
     : translatedText
 
-  return translatedAttributes.replace(
-    /\shref="(\/[^"]*)"/g,
-    (match, href: string) => {
-      const localized = pathForLanguage(href, language)
-      return localized === href ? match : ` href="${localized}"`
-    },
-  )
+  return translatedAttributes.replace(/<[^>]+>/g, (tag) => {
+    /* Locale switchers deliberately point outside the current language tree. */
+    if (tag.includes('data-locale-link')) return tag
+    return tag.replace(
+      /\shref="(\/[^"]*)"/g,
+      (match, href: string) => {
+        const localized = pathForLanguage(href, language)
+        return localized === href ? match : ` href="${localized}"`
+      },
+    )
+  })
 }
 
 function applyTextNode(node: Text, language: Language) {

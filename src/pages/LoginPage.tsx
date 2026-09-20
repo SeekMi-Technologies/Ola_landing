@@ -1,112 +1,131 @@
 import { useState } from 'react'
 
 import OlaLogo from '../components/OlaLogo'
+import { useI18n } from '../i18nContext'
 import { LOGIN } from './loginData'
 
-/**
- * /login — "which workspace?", not "who are you".
- *
- * Rendered WITHOUT the site nav and footer: an auth screen should not offer
- * the marketing bar. The logo is the way back.
- *
- * This used to be a list of identity-provider buttons (Feishu, Lark, Google,
- * Microsoft, GitHub). Those belong on the workspace's OWN sign-in screen —
- * every team is at {slug}.hl.olatech.ai, so the first thing this page has to
- * establish is which host to send you to. The providers appear once you are
- * there.
- *
- * The shape echoes that destination so the handoff does not jolt: wordmark
- * over a white card, a left-aligned heading with a line under it, a labelled
- * field, a full-width button. The tokens stay this site's — bone ground,
- * --radius-card, .btn-primary in ink — rather than the workspace's pale
- * green and dark-green button.
- */
-
-/* The suffix is fixed and not editable — it is a label inside the field, not
-   part of the value. */
+/* Authentication still happens in the team's own workspace. This page only
+   finds that workspace; it must never collect or forward a password. */
 const SUFFIX = '.hl.olatech.ai'
 
-/* A workspace slug is one DNS label: letters, digits and hyphens. Paste a
-   whole URL and this keeps the first label of it. */
 function toSlug(raw: string) {
   const withoutScheme = raw.trim().toLowerCase().replace(/^https?:\/\//, '')
   return withoutScheme.split(/[./\s]/)[0].replace(/[^a-z0-9-]/g, '')
 }
 
+type Theme = 'system' | 'light' | 'dark'
+
+function MonitorIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+      <rect x="3" y="4" width="18" height="13" rx="1.5" />
+      <path d="M9 21h6M12 17v4" />
+    </svg>
+  )
+}
+
+function SunIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+    </svg>
+  )
+}
+
+function MoonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z" />
+    </svg>
+  )
+}
+
 export default function LoginPage() {
-  /* The field holds the slug itself, normalised on every keystroke, so what
-     you see is exactly what gets used. Paste the whole URL and it collapses
-     to the label; the raw text left sitting next to the fixed .hl.olatech.ai
-     otherwise read as "gingiris.hl.olatech.ai.hl.olatech.ai". */
   const [slug, setSlug] = useState('')
+  const [theme, setTheme] = useState<Theme>('system')
+  const { language } = useI18n()
 
   return (
-    /* justify-center with symmetric padding: the stack was pinned to the top
-       with pb-24, which left the whole lower half of the viewport empty under
-       a 420px card. */
-    <main className="flex min-h-screen flex-col items-center justify-center bg-bone px-6 py-12">
-      <a href="/" className="flex items-center" aria-label="Ola 首页">
-        {/* 32px, not 22: on the workspace's own sign-in the wordmark is about a
-            fifth of the card's width, and at 22px over a 420px card it read as
-            a favicon rather than the mark you just clicked through from. */}
-        <OlaLogo className="h-8 w-auto text-ink" />
+    <main className={`login-screen login-theme-${theme} flex min-h-screen flex-col items-center px-5 pb-10 pt-[clamp(64px,12vh,112px)]`}>
+      <a href="/" className="login-logo" aria-label="Ola 首页">
+        <OlaLogo className="h-8 w-auto" />
       </a>
 
-      <div className="mt-10 w-full max-w-[420px]">
-        <div className="rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)] sm:p-9">
-          <h1 className="text-[22px] font-semibold leading-[1.35] tracking-[-0.03em] text-ink">
-            {LOGIN.title}
-          </h1>
-          <p className="mt-2 text-[15px] leading-[1.55] text-ink/60 text-pretty">{LOGIN.lead}</p>
+      <div className="login-card mt-7 w-full max-w-[420px] p-6 sm:p-[26px]">
+        <h1 className="text-[24px] font-semibold leading-[1.25] tracking-[-0.03em]" data-i18n-ignore>
+          {language === 'en' ? 'Sign in' : LOGIN.title}
+        </h1>
+        <p className="login-muted mt-1.5 text-[14px] leading-[1.5]">{LOGIN.lead}</p>
 
-          <form
-            className="mt-7"
-            onSubmit={(e) => {
-              e.preventDefault()
-              if (slug) window.location.href = `https://${slug}${SUFFIX}/`
-            }}
-          >
-            <label htmlFor="team" className="block text-[14px] font-medium text-ink">
-              {LOGIN.fieldLabel}
-            </label>
+        <form
+          className="mt-5"
+          onSubmit={(event) => {
+            event.preventDefault()
+            if (slug) window.location.assign(`https://${slug}${SUFFIX}/`)
+          }}
+        >
+          <label htmlFor="team" className="block text-[14px] font-medium">
+            {LOGIN.fieldLabel}
+          </label>
+          <div className="login-field mt-2 flex h-11 items-center px-3">
+            <input
+              id="team"
+              type="text"
+              value={slug}
+              onChange={(event) => setSlug(toSlug(event.target.value))}
+              placeholder={LOGIN.placeholder}
+              autoComplete="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              className="min-w-0 flex-1 bg-transparent text-[15px] outline-none"
+            />
+            <span className="login-suffix shrink-0 pl-1 text-[14px]" aria-hidden>
+              {SUFFIX}
+            </span>
+          </div>
 
-            {/* One field, two parts: an input that grows and a fixed label.
-                The ring is on the wrapper via focus-within, so the whole box
-                lights up rather than just the text box inside it. */}
-            <div className="mt-2 flex items-center rounded-[10px] border border-mist bg-paper px-4 py-3 transition-colors focus-within:border-signal">
-              <input
-                id="team"
-                value={slug}
-                onChange={(e) => setSlug(toSlug(e.target.value))}
-                placeholder={LOGIN.placeholder}
-                autoComplete="off"
-                autoCapitalize="off"
-                spellCheck={false}
-                className="min-w-0 flex-1 bg-transparent text-[16px] text-ink outline-none placeholder:text-ash"
-              />
-              <span className="shrink-0 pl-1 text-[16px] font-medium text-ink" aria-hidden>
-                {SUFFIX}
-              </span>
-            </div>
-
-            <button
-              type="submit"
-              disabled={!slug}
-              className="btn btn-primary mt-6 w-full disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {LOGIN.cta}
-            </button>
-          </form>
-        </div>
-
-        <p className="mt-6 text-center text-[14px] leading-[1.6] text-ink/60">
-          {LOGIN.helpLead}
-          <a href="/contact" className="underline underline-offset-2 hover:text-signal">
-            {LOGIN.helpLink}
-          </a>
-        </p>
+          <button type="submit" disabled={!slug} className="login-submit mt-4 h-9 w-full text-[14px] font-medium">
+            {LOGIN.cta}
+          </button>
+        </form>
       </div>
 
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-2" data-i18n-ignore>
+        <div className="login-switch" role="group" aria-label={language === 'en' ? 'Language' : '语言'}>
+          <a href="/zh/login" data-locale-link className="login-switch-option" aria-current={language === 'zh-CN' ? 'page' : undefined} lang="zh-CN">
+            中文
+          </a>
+          <a href="/login" data-locale-link className="login-switch-option" aria-current={language === 'en' ? 'page' : undefined} lang="en">
+            EN
+          </a>
+        </div>
+        <div className="login-switch" role="group" aria-label={language === 'en' ? 'Appearance' : '外观'}>
+          {([
+            { id: 'system', label: language === 'en' ? 'Use system setting' : '跟随系统', icon: <MonitorIcon /> },
+            { id: 'light', label: language === 'en' ? 'Light' : '浅色', icon: <SunIcon /> },
+            { id: 'dark', label: language === 'en' ? 'Dark' : '深色', icon: <MoonIcon /> },
+          ] as const).map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              className="login-switch-option login-icon-button"
+              aria-label={option.label}
+              aria-pressed={theme === option.id}
+              onClick={() => setTheme(option.id)}
+            >
+              {option.icon}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <p className="login-muted mt-6 text-center text-[13px] leading-[1.5]">
+        {LOGIN.helpLead}
+        <a href="/contact" className="ml-1 underline underline-offset-2 hover:text-current">
+          {LOGIN.helpLink}
+        </a>
+      </p>
     </main>
   )
 }

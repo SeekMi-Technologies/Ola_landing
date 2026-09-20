@@ -103,6 +103,118 @@
   --color-ok: #4a7c3f; /* warmed success green */
 }
 
+/* The marketing sign-in handoff mirrors the product's auth surface without
+   pretending to authenticate here. Its palette is scoped so the product's
+   almost-white canvas and blue field focus do not recolor the landing site. */
+.login-screen {
+  --login-canvas: #fdfdff;
+  --login-surface: #ffffff;
+  --login-text: #252525;
+  --login-muted: #777777;
+  --login-border: #e8e8ec;
+  --login-control: #f5f5f7;
+  --login-selected: #ffffff;
+  --login-button: #343434;
+  --login-button-hover: #242424;
+  background: var(--login-canvas);
+  color: var(--login-text);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  .login-screen.login-theme-system {
+    --login-canvas: #171717;
+    --login-surface: #232323;
+    --login-text: #f3f3f3;
+    --login-muted: #aaa;
+    --login-border: #3d3d3d;
+    --login-control: #2d2d2d;
+    --login-selected: #444;
+    --login-button: #eee;
+    --login-button-hover: #fff;
+    color-scheme: dark;
+  }
+}
+
+.login-screen.login-theme-dark {
+  --login-canvas: #171717;
+  --login-surface: #232323;
+  --login-text: #f3f3f3;
+  --login-muted: #aaa;
+  --login-border: #3d3d3d;
+  --login-control: #2d2d2d;
+  --login-selected: #444;
+  --login-button: #eee;
+  --login-button-hover: #fff;
+  color-scheme: dark;
+}
+
+.login-logo { color: var(--login-text); }
+.login-card {
+  background: var(--login-surface);
+  border: 1px solid var(--login-border);
+  border-radius: 12px;
+}
+.login-muted { color: var(--login-muted); }
+.login-field {
+  background: var(--login-surface);
+  border: 1px solid var(--login-border);
+  border-radius: 10px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.login-field:focus-within {
+  border-color: #3370ff;
+  box-shadow: 0 0 0 3px rgb(51 112 255 / 14%);
+}
+.login-field input { color: var(--login-text); }
+.login-field input::placeholder, .login-suffix { color: var(--login-muted); }
+.login-submit {
+  background: var(--login-button);
+  border-radius: 7px;
+  color: var(--login-surface);
+  transition: background-color .15s ease;
+}
+.login-submit:hover:not(:disabled) { background: var(--login-button-hover); }
+.login-submit:disabled { cursor: not-allowed; }
+.login-submit:focus-visible, .login-switch-option:focus-visible, .login-logo:focus-visible {
+  outline: 2px solid #3370ff;
+  outline-offset: 3px;
+}
+.login-theme-dark .login-submit, .login-theme-system .login-submit {
+  color: var(--login-canvas);
+}
+@media (prefers-color-scheme: dark) {
+  .login-theme-system .login-submit { color: var(--login-canvas); }
+}
+.login-switch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: var(--login-control);
+  border-radius: 999px;
+}
+.login-switch-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 28px;
+  padding-inline: 10px;
+  border-radius: 999px;
+  color: var(--login-muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color .15s ease, background-color .15s ease;
+}
+.login-switch-option:hover { color: var(--login-text); }
+.login-switch-option[aria-current="page"], .login-switch-option[aria-pressed="true"] {
+  background: var(--login-selected);
+  color: var(--login-text);
+}
+.login-icon-button { width: 32px; min-width: 32px; padding: 0; }
+.login-icon-button svg { width: 18px; height: 18px; }
+
 /* Chinese stays on familiar local system fonts: PingFang on Apple devices,
    Microsoft YaHei on Windows, and Noto CJK where it is installed. This keeps
    Chinese typography stable without adding another remote font request. */
