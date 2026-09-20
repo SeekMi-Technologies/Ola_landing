@@ -37,7 +37,7 @@ function Hero() {
 
 function PlanCard({ plan }: { plan: Plan }) {
   return (
-    <div className="flex h-full flex-col rounded-[var(--radius-card)] bg-paper px-7 pb-8 pt-7 shadow-[var(--shadow-sm)]">
+    <div className="motion-pricing-card flex h-full flex-col rounded-[var(--radius-card)] bg-paper px-7 pb-8 pt-7 shadow-[var(--shadow-sm)]">
       <div className="flex items-center justify-between gap-4">
         <p className="text-[28px] font-medium leading-[1.2] tracking-[-0.02em] text-ink">
           {plan.name}
@@ -71,7 +71,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       ) : (
         <a
           href="/contact"
-          className={`btn mt-6 justify-center ${plan.ctaQuiet ? 'border border-mist bg-bone text-ink hover:bg-mist/40' : 'btn-primary'}`}
+          className={`btn motion-pricing-cta mt-6 justify-center ${plan.ctaQuiet ? 'border border-mist bg-bone text-ink hover:bg-mist/40' : 'btn-primary'}`}
         >
           {plan.cta}
         </a>
@@ -121,7 +121,7 @@ function Plans() {
 function PlusMark({ open }: { open: boolean }) {
   return (
     <span
-      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-[var(--color-on-ink)] transition-transform duration-200 ${
+      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-[var(--color-on-ink)] transition-transform duration-200 motion-reduce:transition-none ${
         open ? 'rotate-45 bg-signal' : ''
       }`}
       aria-hidden
@@ -148,7 +148,7 @@ function Faqs() {
             return (
               <article
                 key={item.q}
-                className={`overflow-hidden rounded-[var(--radius-card)] border bg-paper shadow-[var(--shadow-sm)] transition-colors duration-200 ${
+                className={`overflow-hidden rounded-[var(--radius-card)] border bg-paper shadow-[var(--shadow-sm)] transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none hover:shadow-[0_4px_14px_rgba(24,23,23,0.07)] focus-within:shadow-[0_4px_14px_rgba(24,23,23,0.07)] ${
                   isOpen ? 'border-ink/20' : 'border-mist/55 hover:border-ink/15'
                 }`}
               >
@@ -172,7 +172,8 @@ function Faqs() {
 
                 <div
                   id={answerId}
-                  className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                  aria-hidden={!isOpen}
+                  className={`grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${
                     isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
                   }`}
                 >

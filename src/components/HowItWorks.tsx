@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { IconCheck } from './icons'
 import OlaLogo from './OlaLogo'
 
@@ -82,7 +83,7 @@ const STEPS = [
 
 function OlaNode() {
   return (
-    <div className="flex h-[72px] w-[108px] shrink-0 flex-col items-center justify-center rounded-[18px] bg-paper text-ink shadow-[0_18px_42px_-20px_rgba(8,32,20,0.85)]">
+    <div className="flow-hub flex h-[72px] w-[108px] shrink-0 flex-col items-center justify-center rounded-[18px] bg-paper text-ink shadow-[0_18px_42px_-20px_rgba(8,32,20,0.85)]">
       <OlaLogo className="h-[21px] w-auto text-ink" />
       <span className="mt-1.5 font-mono text-[10px] text-ink/45">执行中枢</span>
     </div>
@@ -91,7 +92,7 @@ function OlaNode() {
 
 function ResultNode() {
   return (
-    <div className="w-full rounded-[16px] bg-paper p-5 text-ink shadow-[0_20px_44px_-24px_rgba(8,32,20,0.85)]">
+    <div className="flow-result w-full rounded-[16px] bg-paper p-5 text-ink shadow-[0_20px_44px_-24px_rgba(8,32,20,0.85)]">
       <div className="flex items-center gap-2 text-signal">
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-signal text-white" aria-hidden>
           <IconCheck className="h-3.5 w-3.5" />
@@ -134,7 +135,7 @@ const RESOURCES = [
 
 function ResourceNode() {
   return (
-    <div className="relative grid w-full gap-3 md:pl-5">
+    <div className="flow-resource relative grid w-full gap-3 md:pl-5">
       {RESOURCES.map(({ label, items, note }, index) => (
         <div key={label} className="relative">
           {/* Half a spine per row rather than one span across both. The
@@ -175,9 +176,9 @@ function ResourceNode() {
   )
 }
 
-function FlowConnector() {
+function FlowConnector({ segment }: { segment: 'source' | 'result' }) {
   return (
-    <div className="flex h-6 items-center justify-center md:h-auto md:w-full">
+    <div className={`flow-connector-${segment} flex h-6 items-center justify-center md:h-auto md:w-full`}>
       <span className="h-6 w-px bg-white/30 md:h-px md:w-full" aria-hidden />
     </div>
   )
@@ -195,11 +196,11 @@ function FlowPanel() {
     <div className="grid-field overflow-hidden rounded-[var(--radius-card)] px-5 py-7 sm:px-7 sm:py-8">
       <div className="grid items-center md:grid-cols-[minmax(155px,0.8fr)_32px_92px_32px_minmax(235px,1.2fr)] lg:grid-cols-[minmax(220px,1fr)_56px_auto_56px_minmax(300px,1.1fr)]">
         <ResultNode />
-        <FlowConnector />
+        <FlowConnector segment="result" />
         <div className="flex justify-center">
           <OlaNode />
         </div>
-        <FlowConnector />
+        <FlowConnector segment="source" />
         <ResourceNode />
       </div>
     </div>
@@ -209,6 +210,23 @@ function FlowPanel() {
 /* ------------------------------------------------------------------ */
 
 export default function HowItWorks() {
+  const flowRef = useRef<HTMLDivElement>(null)
+  const [flowInView, setFlowInView] = useState(false)
+
+  useEffect(() => {
+    const node = flowRef.current
+    if (!node || !('IntersectionObserver' in window)) return
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return
+      setFlowInView(true)
+      observer.disconnect()
+    }, { threshold: 0.35 })
+
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <section id="how-it-works" className="scroll-mt-[68px] border-t border-mist/70 bg-bone py-16 md:py-20">
       <div className="shell">
@@ -218,7 +236,7 @@ export default function HowItWorks() {
           连接工具，交给 Ola，几分钟后拿到结果。
         </p>
 
-        <div className="mt-9">
+        <div ref={flowRef} className={`mt-9 ${flowInView ? 'flow-in-view' : ''}`}>
           <FlowPanel />
         </div>
 
@@ -230,7 +248,7 @@ export default function HowItWorks() {
           {STEPS.map((s) => (
             <li
               key={s.n}
-              className="flex flex-col rounded-[var(--radius-card)] bg-paper p-6 shadow-[var(--shadow-sm)]"
+              className="motion-info-card flex flex-col rounded-[var(--radius-card)] bg-paper p-6 shadow-[var(--shadow-sm)]"
             >
               <div className="mb-5">{StepArt[s.art]}</div>
 

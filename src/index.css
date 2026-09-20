@@ -619,4 +619,140 @@
   .btn-ghost:hover {
     color: var(--color-signal);
   }
+  .btn:focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+  }
+}
+
+/* Static explanation cards acknowledge the pointer with a little depth but
+   do not lift: elevation on an unclickable card should never suggest a link.
+   Linked cards get the same surface language plus a small lift and a clear
+   keyboard focus state. Touch devices do not receive simulated hover. */
+.motion-info-card,
+.motion-link-card {
+  transition: box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.motion-link-card:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  box-shadow: var(--shadow-md);
+}
+
+@media (hover: hover) {
+  .motion-info-card:hover {
+    box-shadow: 0 10px 24px -16px rgb(24 23 23 / 25%);
+  }
+  .motion-link-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+@media (prefers-color-scheme: dark) and (hover: hover) {
+  .motion-info-card:hover {
+    box-shadow: 0 0 0 1px var(--color-mist), 0 10px 24px -16px rgb(0 0 0 / 65%);
+  }
+  .motion-link-card:hover {
+    box-shadow: 0 0 0 1px var(--color-mist), var(--shadow-md);
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .motion-link-card {
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  }
+  .motion-link-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-info-card,
+  .motion-link-card {
+    transition: none;
+  }
+}
+
+/* Homepage motion is deliberately limited to arrival, user selection and
+   the product flow. Content is never hidden until JavaScript runs: the hero
+   animates from CSS alone, and the flow is fully readable without an
+   IntersectionObserver (including during prerendering). */
+@keyframes home-enter {
+  from { opacity: 0.68; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes demo-switch {
+  from { opacity: 0.45; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes flow-node-enter {
+  from { opacity: 0.6; transform: translateY(7px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes flow-line-enter {
+  from { opacity: 0.25; }
+  to { opacity: 1; }
+}
+
+.motion-pricing-cta:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+}
+
+.motion-pricing-card:focus-within {
+  box-shadow: var(--shadow-md);
+}
+
+@media (hover: hover) {
+  .motion-pricing-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .motion-pricing-card:focus-within {
+    box-shadow: 0 0 0 1px var(--color-mist), var(--shadow-md);
+  }
+}
+
+@media (prefers-color-scheme: dark) and (hover: hover) {
+  .motion-pricing-card:hover {
+    box-shadow: 0 0 0 1px var(--color-mist), var(--shadow-md);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-enter-title { animation: home-enter 480ms ease-out both; }
+  .hero-enter-copy { animation: home-enter 520ms 100ms ease-out both; }
+  .hero-enter-demo { animation: home-enter 600ms 180ms ease-out both; }
+
+  .demo-switch-in { animation: demo-switch 220ms ease-out both; }
+
+  .motion-pricing-card {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+  .motion-pricing-card:focus-within {
+    transform: translateY(-3px);
+  }
+  .motion-pricing-cta { transition: background-color 180ms ease, transform 180ms ease; }
+  .motion-pricing-cta:focus-visible { transform: translateY(-1px); }
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .flow-in-view .flow-resource { animation: flow-node-enter 380ms ease-out both; }
+  .flow-in-view .flow-connector-source { animation: flow-line-enter 300ms 120ms ease-out both; }
+  .flow-in-view .flow-hub { animation: flow-node-enter 380ms 240ms ease-out both; }
+  .flow-in-view .flow-connector-result { animation: flow-line-enter 300ms 380ms ease-out both; }
+  .flow-in-view .flow-result { animation: flow-node-enter 380ms 500ms ease-out both; }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .motion-pricing-card:hover {
+    transform: translateY(-3px);
+  }
+  .motion-pricing-cta:hover { transform: translateY(-1px); }
 }

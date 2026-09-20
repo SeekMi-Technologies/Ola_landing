@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import {
   CATEGORIES,
   INTEGRATIONS,
+  matchesIntegrationQuery,
   type CategoryId,
   type Integration,
 } from './integrationsData'
@@ -55,27 +56,28 @@ function Card({ item }: { item: Integration }) {
   const category = CATEGORIES.find((c) => c.id === item.category)!
   return (
     <article
-      className="relative flex min-h-[164px] flex-col rounded-[18px] border border-mist/70 bg-paper p-5 transition-colors hover:border-signal/35 sm:min-h-[172px]"
+      className="motion-info-card relative flex min-h-[200px] flex-col rounded-[18px] border border-mist/70 bg-paper p-5"
     >
       {item.comingSoon && (
         <span className="absolute right-5 top-5 rounded-full bg-signal/10 px-2.5 py-1 text-[10px] font-medium tracking-[0.04em] text-signal">
-          Coming soon
+          即将支持
         </span>
       )}
-      <span className="flex h-11 w-11 shrink-0 items-center justify-start">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-start">
         <Mark
           logo={item.logo}
           logoDark={item.logoDark}
           className={`flex items-center justify-start ${item.wordmark ? 'h-[28px] w-[74px]' : 'h-[42px] w-[42px]'}`}
         />
-      </span>
+      </div>
 
-      <span className="mt-auto min-w-0 text-left">
+      <div className="mt-auto min-w-0 text-left">
         <span className="block text-[12px] font-medium text-ash">{category.name}</span>
-        <span className="mt-1.5 block text-[18px] font-medium tracking-[-0.02em] text-ink">
+        <h3 className="mt-1.5 text-[18px] font-medium tracking-[-0.02em] text-ink">
           {item.name}
-        </span>
-      </span>
+        </h3>
+        <p className="mt-2 text-[13px] leading-[1.5] text-ink/65 text-pretty">{item.blurb}</p>
+      </div>
     </article>
   )
 }
@@ -93,11 +95,11 @@ function NeedMoreCard() {
   return (
     <a
       href="/contact"
-      className="group relative flex min-h-[164px] flex-col rounded-[18px] border border-dashed border-ash/45 p-5 transition-colors hover:border-signal/50 sm:min-h-[172px]"
+      className="motion-link-card group relative flex min-h-[200px] flex-col rounded-[18px] border border-dashed border-ash/45 p-5 motion-safe:transition-colors hover:border-signal/50 focus-visible:border-signal focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal"
     >
       <span className="flex h-11 w-11 shrink-0 items-center justify-start">
         <span
-          className="flex h-[42px] w-[42px] items-center justify-center rounded-[12px] border border-dashed border-ash/45 text-[22px] font-light leading-none text-ash transition-colors group-hover:border-signal/50 group-hover:text-signal"
+          className="flex h-[42px] w-[42px] items-center justify-center rounded-[12px] border border-dashed border-ash/45 text-[22px] font-light leading-none text-ash motion-safe:transition-colors group-hover:border-signal/50 group-hover:text-signal group-focus-visible:border-signal group-focus-visible:text-signal"
           aria-hidden
         >
           +
@@ -106,7 +108,7 @@ function NeedMoreCard() {
 
       <span className="mt-auto min-w-0 text-left">
         <span className="block text-[12px] font-medium text-ash">没找到？</span>
-        <span className="mt-1.5 block text-[18px] font-medium tracking-[-0.02em] text-ink transition-colors group-hover:text-signal">
+        <span className="mt-1.5 block text-[18px] font-medium tracking-[-0.02em] text-ink motion-safe:transition-colors group-hover:text-signal group-focus-visible:text-signal">
           告诉我们你还想接什么
         </span>
       </span>
@@ -128,17 +130,13 @@ function Directory() {
   const [query, setQuery] = useState('')
 
   const shown = useMemo(() => {
-    const q = query.trim().toLowerCase()
     return INTEGRATIONS.filter((i) => {
       if (active !== 'all' && i.category !== active) return false
-      if (!q) return true
-      return (
-        i.name.toLowerCase().includes(q) ||
-        i.blurb.toLowerCase().includes(q) ||
-        CATEGORIES.find((c) => c.id === i.category)!.name.includes(q)
-      )
+      return matchesIntegrationQuery(i, query)
     })
   }, [active, query])
+  const availableCount = shown.filter((item) => !item.comingSoon).length
+  const comingSoonCount = shown.length - availableCount
 
   const heading =
     active === 'all'
@@ -148,20 +146,23 @@ function Directory() {
   return (
     <section id="all-integrations" className="scroll-mt-[68px] bg-bone pb-16 pt-14 md:pb-20 md:pt-16">
       <div className="shell">
-        <div className="flex items-end justify-between gap-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
           <div className="max-w-[620px]">
             <h2 className="t-heading">{heading.name}</h2>
             <p className="mt-3 text-[15px] leading-[1.6] text-ink/65 text-pretty sm:text-[16px]">
               {heading.blurb}
             </p>
           </div>
-          {/* The count and its label are separate nodes on purpose. Written
-              as `{n} 个集成` React emits two text nodes and the i18n walker,
-              which matches whole nodes, can never see the label — it stayed
-              Chinese in the English build. */}
-          <span className="shrink-0 rounded-full bg-signal/10 px-3.5 py-1.5 text-[13px] font-medium text-signal">
-            {shown.length}&nbsp;<span>个集成</span>
-          </span>
+          {/* Keep translated labels in separate nodes so the i18n walker can
+              localize them without also having to parse the runtime counts. */}
+          <div className="flex shrink-0 flex-wrap gap-2" aria-live="polite">
+            <span className="rounded-full bg-signal/10 px-3.5 py-1.5 text-[13px] font-medium text-signal">
+              {availableCount}&nbsp;<span>个可用</span>
+            </span>
+            <span className="rounded-full border border-mist px-3.5 py-1.5 text-[13px] font-medium text-ink/65">
+              {comingSoonCount}&nbsp;<span>个即将支持</span>
+            </span>
+          </div>
         </div>
 
         {/* Categories as a wrapped pill row, the way /product lists its
@@ -179,9 +180,9 @@ function Directory() {
                 type="button"
                 onClick={() => setActive(c.id)}
                 aria-pressed={active === c.id}
-                className={`rounded-full border px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
+                className={`rounded-full border px-3.5 py-1.5 text-[13px] font-medium motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal ${
                   active === c.id
-                    ? 'border-signal bg-signal text-white'
+                    ? 'border-signal bg-signal text-on-ink'
                     : 'border-mist bg-paper text-ink/70 hover:border-ink/25 hover:text-ink'
                 }`}
               >
@@ -197,7 +198,7 @@ function Directory() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="搜索集成"
               aria-label="搜索集成"
-              className="w-full rounded-full border border-mist bg-paper py-1.5 pl-4 pr-10 text-[14px] text-ink outline-none placeholder:text-ash focus:border-signal"
+              className="w-full rounded-full border border-mist bg-paper py-1.5 pl-4 pr-10 text-[14px] text-ink placeholder:text-ash focus:border-signal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
             />
             <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-ash">
               <SearchIcon />
@@ -213,9 +214,26 @@ function Directory() {
             <NeedMoreCard />
           </div>
         ) : (
-          <p className="mt-8 rounded-[var(--radius-card)] border border-dashed border-mist px-6 py-12 text-center text-[15px] text-ink/55">
-            没有匹配的集成。换个词试试，或者直接告诉我们你想接什么。
-          </p>
+          <div className="mt-8 rounded-[var(--radius-card)] border border-dashed border-mist px-6 py-12 text-center">
+            <p className="text-[15px] text-ink/65">
+              没有匹配的集成。换个词试试，或者直接告诉我们你想接什么。
+            </p>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => { setActive('all'); setQuery('') }}
+                className="rounded-full border border-mist bg-paper px-4 py-2 text-[14px] font-medium text-ink motion-safe:transition-colors hover:border-ink/25 hover:bg-linen focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
+              >
+                清除筛选
+              </button>
+              <a
+                href="/contact"
+                className="rounded-full bg-signal px-4 py-2 text-[14px] font-medium text-on-ink motion-safe:transition-colors hover:bg-signal/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
+              >
+                联系我们
+              </a>
+            </div>
+          </div>
         )}
       </div>
     </section>

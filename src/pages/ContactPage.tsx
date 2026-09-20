@@ -1,4 +1,7 @@
+import { useState } from 'react'
+
 import PageHero from '../components/PageHero'
+import { useI18n } from '../i18nContext'
 import { CHANNELS, HERO, NEXT, PICKER } from './contactData'
 
 /**
@@ -101,6 +104,45 @@ const CHANNEL_ART: Record<string, React.ReactNode> = {
   ),
 }
 
+function WeChatHandle({ handle }: { handle: string }) {
+  const { language } = useI18n()
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'failed'>('idle')
+  const isEnglish = language === 'en'
+
+  async function copyHandle() {
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable')
+      await navigator.clipboard.writeText(handle)
+      setCopyStatus('copied')
+    } catch {
+      setCopyStatus('failed')
+    }
+  }
+
+  return (
+    <div className="mt-1" data-i18n-ignore>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <p className="select-all font-mono text-[17px] text-ink">{handle}</p>
+        <button
+          type="button"
+          onClick={copyHandle}
+          aria-label={isEnglish ? 'Copy WeChat ID' : '复制微信号'}
+          className="rounded-md border border-mist/80 px-2.5 py-1 text-[12px] font-medium text-ink/70 transition-colors hover:border-ink/30 hover:bg-linen hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal motion-reduce:transition-none"
+        >
+          {isEnglish ? 'Copy' : '复制'}
+        </button>
+      </div>
+      <p role="status" className="mt-1 min-h-[18px] text-[12px] text-ink/65">
+        {copyStatus === 'copied'
+          ? (isEnglish ? 'Copied to clipboard' : '已复制到剪贴板')
+          : copyStatus === 'failed'
+            ? (isEnglish ? 'Could not copy. Please select the ID above.' : '复制失败，请手动选择上面的微信号')
+            : ''}
+      </p>
+    </div>
+  )
+}
+
 function Channels() {
   return (
     <section className="bg-bone pb-16 pt-16 md:pb-20 md:pt-24">
@@ -115,7 +157,7 @@ function Channels() {
           {CHANNELS.map((channel) => (
             <div
               key={channel.id}
-              className="flex flex-col rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)] sm:p-9"
+              className="motion-info-card flex flex-col rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)] sm:p-9"
             >
               <svg viewBox="0 0 96 64" className="h-16 w-24" aria-hidden>
                 {CHANNEL_ART[channel.id]}
@@ -136,18 +178,18 @@ function Channels() {
                 /* An address you can act on: mail addresses open the
                    composer, anything else (a WeChat ID) stays selectable
                    text. */
-                <p className="mt-1 select-all font-mono text-[17px] text-ink">
-                  {channel.handle.includes('@') ? (
+                channel.id === 'wechat' ? (
+                  <WeChatHandle handle={channel.handle} />
+                ) : (
+                  <p className="mt-1 select-all font-mono text-[17px] text-ink">
                     <a
                       href={`mailto:${channel.handle}`}
-                      className="underline underline-offset-2 transition-colors hover:text-signal"
+                      className="underline underline-offset-2 transition-colors hover:text-signal focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal motion-reduce:transition-none"
                     >
                       {channel.handle}
                     </a>
-                  ) : (
-                    channel.handle
-                  )}
-                </p>
+                  </p>
+                )
               ) : (
                 <span className="mt-2 inline-flex rounded-full bg-mist/60 px-2.5 py-1 text-[12px] font-medium text-ink/55">
                   地址待补充
@@ -172,7 +214,7 @@ function Next() {
             <a
               key={item.href}
               href={item.href}
-              className="group flex flex-col rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)] transition-colors hover:bg-linen"
+              className="motion-link-card group flex flex-col rounded-[var(--radius-card)] bg-paper p-7 shadow-[var(--shadow-sm)] transition-colors hover:bg-linen"
             >
               <svg viewBox="0 0 96 64" className="h-16 w-24" aria-hidden>
                 {NEXT_ART[item.tone]}
@@ -186,7 +228,7 @@ function Next() {
                     {item.body}
                   </p>
                 </div>
-                <span className="mt-1 shrink-0 text-ink/35 transition-colors group-hover:text-ink">
+                <span className="mt-1 shrink-0 text-ink/35 transition-colors group-hover:text-ink group-focus-visible:text-ink">
                   <CornerArrow />
                 </span>
               </div>

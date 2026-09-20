@@ -42,7 +42,7 @@ function Logo() {
   return (
     <a
       href="/"
-      className="flex items-center lg:mt-[5px] lg:self-start"
+      className="flex items-center rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal lg:mt-[5px] lg:self-start"
       aria-label="Ola 首页"
     >
       <OlaLogo className="h-7 w-auto text-ink" />
@@ -145,9 +145,9 @@ export default function Footer() {
                 aria-label={BRAND_LABEL[id]}
                 /* 44px hit area, 28px ring: the visible circle is unchanged,
                    the target around it is now a comfortable tap. */
-                className="group flex h-11 w-11 items-center justify-center rounded-full text-ink"
+                className="group flex h-11 w-11 items-center justify-center rounded-full text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
               >
-                <span className="flex h-7 w-7 items-center justify-center rounded-full border border-mist bg-paper transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-[var(--color-on-ink)]">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full border border-mist bg-paper transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-[var(--color-on-ink)] group-focus-visible:border-ink group-focus-visible:bg-ink group-focus-visible:text-[var(--color-on-ink)]">
                   <svg
                     viewBox="0 0 24 24"
                     fill="currentColor"

@@ -1,4 +1,4 @@
-import { Fragment, useState, type ReactNode } from 'react'
+import { Fragment, useState, type KeyboardEvent, type ReactNode } from 'react'
 import OlaLogo, { OlaAvatar } from '../OlaLogo'
 import {
   GROUPS,
@@ -31,7 +31,7 @@ function Rail() {
        at 10px, and they named parts of Feishu the demo never uses — noise
        around the one thing this rail has to say, which is "this is a real
        client". Narrower now that nothing has to fit under the glyphs. */
-    <aside className="hidden w-[52px] shrink-0 flex-col items-center gap-1 border-r border-mist bg-linen py-3 sm:flex">
+    <aside aria-hidden="true" className="hidden w-[52px] shrink-0 flex-col items-center gap-1 border-r border-mist bg-linen py-3 sm:flex">
       {/* The wordmark on its own, no chip. A filled tile made it read as
           one more button in the rail; unboxed it reads as the client's
           identity, which is what a logo in this position is for. */}
@@ -39,11 +39,10 @@ function Rail() {
         <OlaLogo className="w-[26px] text-ink" />
       </span>
       {RAIL.map((r) => (
-        <button
+        <span
           key={r.label}
-          aria-label={r.label}
-          className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-            r.active ? 'bg-ink/[0.06] text-ink' : 'text-charcoal hover:bg-black/[0.03]'
+          className={`flex h-9 w-9 items-center justify-center rounded-lg ${
+            r.active ? 'bg-ink/[0.06] text-ink' : 'text-charcoal'
           }`}
         >
           <svg
@@ -57,7 +56,7 @@ function Rail() {
           >
             <path d={r.path} />
           </svg>
-        </button>
+        </span>
       ))}
     </aside>
   )
@@ -443,6 +442,22 @@ function TabBar({
   active: string
   onPick: (id: string) => void
 }) {
+  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    let nextIndex: number
+    switch (event.key) {
+      case 'ArrowRight': nextIndex = (index + 1) % GROUPS.length; break
+      case 'ArrowLeft': nextIndex = (index - 1 + GROUPS.length) % GROUPS.length; break
+      case 'Home': nextIndex = 0; break
+      case 'End': nextIndex = GROUPS.length - 1; break
+      default: return
+    }
+    event.preventDefault()
+    onPick(GROUPS[nextIndex].id)
+    event.currentTarget.parentElement
+      ?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[nextIndex]
+      ?.focus()
+  }
+
   return (
     /* One swipeable row on phones, a grid from sm.
        At 375 the 3-column grid ran to five rows and 410px — a whole screen
@@ -462,16 +477,21 @@ function TabBar({
     <div
       className="-mx-1.5 flex snap-x snap-mandatory gap-1 overflow-x-auto rounded-[14px] px-1.5 py-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:bg-white/[0.07] lg:px-1.5"
       role="tablist"
+      aria-label="Ola 工作示例"
     >
-      {GROUPS.map((g) => {
+      {GROUPS.map((g, index) => {
         const on = g.id === active
         return (
           <button
             key={g.id}
             role="tab"
+            id={`demo-tab-${g.id}`}
+            aria-controls="demo-panel"
             aria-selected={on}
+            tabIndex={on ? 0 : -1}
             onClick={() => onPick(g.id)}
-            className={`flex shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] px-3 py-2 text-[14px] transition-colors lg:shrink lg:px-2 ${
+            onKeyDown={(event) => handleTabKeyDown(event, index)}
+            className={`flex shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] px-3 py-2 text-[14px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:shrink lg:px-2 ${
               on
                 ? 'bg-bone font-medium text-ink shadow-[var(--shadow-sm)]'
                 : 'bg-white/[0.07] text-white/70 hover:bg-white/10 hover:text-white lg:bg-transparent'
@@ -531,13 +551,26 @@ export default function FeishuDemo() {
      and the whole demo crashed. `tsc` cannot catch it because the id is
      a plain string. */
   const [active, setActive] = useState(GROUPS[0].id)
+  const [hasInteracted, setHasInteracted] = useState(false)
   const group = GROUPS.find((g) => g.id === active)!
+
+  function pickGroup(id: string) {
+    if (id === active) return
+    setHasInteracted(true)
+    setActive(id)
+  }
 
   return (
     <div>
-      <TabBar active={active} onPick={setActive} />
+      <TabBar active={active} onPick={pickGroup} />
 
-      <div className="mt-4 flex flex-col gap-4 md:mt-5 md:flex-row md:items-start md:gap-6">
+      <div
+        key={group.id}
+        id="demo-panel"
+        role="tabpanel"
+        aria-labelledby={`demo-tab-${group.id}`}
+        className={`mt-4 flex flex-col gap-4 md:mt-5 md:flex-row md:items-start md:gap-6 ${hasInteracted ? 'demo-switch-in' : ''}`}
+      >
         <div className="flex w-full shrink-0 flex-col gap-3 md:w-[262px]">
           <PromptCard prompt={group.prompt} />
           <BlurbCard blurb={group.blurb} />

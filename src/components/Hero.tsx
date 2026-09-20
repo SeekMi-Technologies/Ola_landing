@@ -23,7 +23,7 @@ export default function Hero() {
 
               Tracking is loosened for Chinese only — see the :lang rule in
               index.css. */}
-          <h1 className="t-display leading-[1.38]">
+          <h1 className="t-display hero-enter-title leading-[1.38]">
             你的
             <span className="hero-en-space" aria-hidden>{' '}</span>
             <br className="br-en" />
@@ -36,7 +36,7 @@ export default function Hero() {
               top, the paragraph's 0. One value covers both to within a
               pixel. Only from lg — below that the columns stack and there is
               no first line to align with. */}
-          <div className="lg:pt-[10px]">
+          <div className="hero-enter-copy lg:pt-[10px]">
             {/* Figma 519:17939 — 20px / 30px line / rgba(48,44,44,0.65),
                 i.e. the ink colour at 65%, not a separate grey. Width in px,
                 not ch — the ch unit measures "0" and under-sizes CJK lines. */}
@@ -50,7 +50,7 @@ export default function Hero() {
                 with the one in the nav. */}
             <a
               href="#demo"
-              className="group mt-7 inline-flex items-center gap-2 text-[15px] text-ink underline underline-offset-4 hover:text-signal"
+              className="group mt-7 inline-flex items-center gap-2 rounded-sm text-[15px] text-ink underline underline-offset-4 hover:text-signal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal"
             >
               Ola 都能帮你做什么
               <IconArrow className="h-4 w-4 rotate-90 transition-transform group-hover:translate-y-0.5" />
@@ -62,7 +62,7 @@ export default function Hero() {
       {/* Showcase panel: black, with the same 32px grid the other fields
           use. The colour is carried by the Prompt card instead — the
           inverse of Claude Tag, which puts a dark card on a warm field. */}
-      <div id="demo" className="shell mt-14 scroll-mt-[84px] md:mt-16">
+      <div id="demo" className="shell hero-enter-demo mt-14 scroll-mt-[84px] md:mt-16">
         <div className="grid-field grid-field--ink rounded-[var(--radius-card)] p-3 sm:p-6 lg:p-8">
           <FeishuDemo />
         </div>

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { useI18n, type Language } from '../i18nContext'
 import { IconCheck } from './icons'
 import OlaLogo from './OlaLogo'
 import { APPLY_URL, CHANGELOG_URL, DOCS_URL } from '../links'
 import { pathForLanguage } from '../routes'
+import type { Route } from '../routes'
 
 /* Three entries, mapped to the dedicated pages. The sections dropped from
    the bar — how-it-works, workspace, security, faq — still render on the
@@ -21,7 +22,7 @@ const LANGUAGES: { id: Language; label: string }[] = [
 
 function Logo() {
   return (
-    <a href="/" className="flex items-center" aria-label="Ola 首页">
+    <a href="/" className="flex items-center rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal" aria-label="Ola 首页">
       <OlaLogo className="h-5 w-auto text-ink" />
     </a>
   )
@@ -49,7 +50,12 @@ function LanguageMenu() {
   const [open, setOpen] = useState(false)
   const { language } = useI18n()
   const rootRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const currentLabel = LANGUAGES.find((item) => item.id === language)?.label
+
+  useEffect(() => {
+    if (open) rootRef.current?.querySelector<HTMLButtonElement>('[role="menuitem"]')?.focus()
+  }, [open])
 
   useEffect(() => {
     function closeOnOutsideClick(event: MouseEvent) {
@@ -57,7 +63,10 @@ function LanguageMenu() {
     }
 
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') setOpen(false)
+      if (event.key === 'Escape' && open) {
+        setOpen(false)
+        triggerRef.current?.focus()
+      }
     }
 
     document.addEventListener('mousedown', closeOnOutsideClick)
@@ -66,7 +75,7 @@ function LanguageMenu() {
       document.removeEventListener('mousedown', closeOnOutsideClick)
       document.removeEventListener('keydown', closeOnEscape)
     }
-  }, [])
+  }, [open])
 
   function selectLanguage(nextLanguage: Language) {
     setOpen(false)
@@ -83,14 +92,42 @@ function LanguageMenu() {
     )
   }
 
+  function handleMenuKeys(event: ReactKeyboardEvent<HTMLDivElement>) {
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return
+    const items = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'))
+    if (!items.length) return
+    event.preventDefault()
+    const current = items.indexOf(document.activeElement as HTMLButtonElement)
+    const next = event.key === 'Home' ? 0
+      : event.key === 'End' ? items.length - 1
+        : event.key === 'ArrowDown' ? (current + 1) % items.length
+          : (current - 1 + items.length) % items.length
+    items[next]?.focus()
+  }
+
   return (
-    <div ref={rootRef} className="relative" data-i18n-ignore>
+    <div
+      ref={rootRef}
+      className="relative"
+      data-i18n-ignore
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false)
+      }}
+    >
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((current) => !current)}
+        onKeyDown={(event) => {
+          if (event.key === 'ArrowDown') {
+            event.preventDefault()
+            setOpen(true)
+          }
+        }}
         aria-expanded={open}
         aria-haspopup="menu"
-        className="flex h-10 items-center gap-2 rounded-[var(--radius-btn)] px-2 text-[15px] text-ink transition-colors hover:bg-bone hover:text-ink sm:px-2.5"
+        aria-label={language === 'en' ? 'Choose language' : '选择语言'}
+        className="flex h-10 items-center gap-2 rounded-[var(--radius-btn)] px-2 text-[15px] text-ink transition-colors hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal sm:px-2.5"
       >
         <GlobeIcon />
         <span className="hidden whitespace-nowrap lg:inline">{currentLabel}</span>
@@ -104,12 +141,12 @@ function LanguageMenu() {
         >
           <path d="m1 1.5 5 5 5-5" />
         </svg>
-        <span className="sr-only sm:hidden">选择语言</span>
       </button>
 
       {open && (
         <div
           role="menu"
+          onKeyDown={handleMenuKeys}
           className="absolute right-0 top-[calc(100%+10px)] w-44 overflow-hidden rounded-[14px] border border-mist bg-paper p-2 shadow-md"
         >
           {LANGUAGES.map((item) => (
@@ -118,7 +155,7 @@ function LanguageMenu() {
               type="button"
               role="menuitem"
               onClick={() => selectLanguage(item.id)}
-              className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[15px] transition-colors hover:bg-bone ${
+              className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[15px] transition-colors hover:bg-bone focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-signal ${
                 item.id === language ? 'text-ink' : 'text-ink/60'
               }`}
             >
@@ -155,9 +192,10 @@ function MenuIcon({ open }: { open: boolean }) {
    It sits below `md` now, not `lg`: iPad portrait is 768 and had no reason
    to be on the phone menu — see the nav row for what had to give in the
    English build to make that fit. */
-function MobileMenu() {
+function MobileMenu({ route }: { route: Route }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (!open) return
@@ -165,7 +203,10 @@ function MobileMenu() {
       if (!rootRef.current?.contains(event.target as Node)) setOpen(false)
     }
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') setOpen(false)
+      if (event.key === 'Escape') {
+        setOpen(false)
+        triggerRef.current?.focus()
+      }
     }
     document.addEventListener('mousedown', closeOnOutsideClick)
     document.addEventListener('keydown', closeOnEscape)
@@ -180,11 +221,12 @@ function MobileMenu() {
   return (
     <div ref={rootRef} className="md:hidden">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label="菜单"
-        className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-btn)] text-ink transition-colors hover:bg-bone"
+        className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-btn)] text-ink transition-colors hover:bg-bone focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
       >
         <MenuIcon open={open} />
       </button>
@@ -208,7 +250,7 @@ function MobileMenu() {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setOpen(false)}
-                  className="inline-flex items-center gap-1.5 text-[13px] font-medium uppercase tracking-[0.08em] text-ink/55 transition-colors hover:text-ink"
+                  className="inline-flex items-center gap-1.5 rounded-sm text-[13px] font-medium uppercase tracking-[0.08em] text-ink/55 transition-colors hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
                 >
                   {label}
                   <svg
@@ -236,8 +278,9 @@ function MobileMenu() {
               <div key={item.href} className="border-b border-mist/60">
                 <a
                   href={item.href}
+                  aria-current={route === item.href.slice(1) ? 'page' : undefined}
                   onClick={() => setOpen(false)}
-                  className="-mx-3 block rounded-[10px] px-3 py-4 text-[18px] tracking-[-0.01em] text-ink transition-colors hover:bg-bone"
+                  className={`-mx-3 block rounded-[10px] px-3 py-4 text-[18px] tracking-[-0.01em] text-ink transition-colors hover:bg-bone focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-signal ${route === item.href.slice(1) ? 'bg-bone font-medium' : ''}`}
                 >
                   {item.label}
                 </a>
@@ -251,7 +294,7 @@ function MobileMenu() {
               <a
                 href="/login"
                 onClick={() => setOpen(false)}
-                className="-mx-3 rounded-[10px] px-3 py-2 text-[16px] text-ink/70 transition-colors hover:bg-bone hover:text-ink"
+                className="-mx-3 rounded-[10px] px-3 py-2 text-[16px] text-ink/70 transition-colors hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
               >
                 登录
               </a>
@@ -263,7 +306,7 @@ function MobileMenu() {
   )
 }
 
-export default function Nav() {
+export default function Nav({ route }: { route: Route }) {
   return (
     <header className="sticky top-0 z-50">
       {/* Main nav */}
@@ -287,9 +330,10 @@ export default function Nav() {
                 <a
                   key={item.href}
                   href={item.href}
+                  aria-current={route === item.href.slice(1) ? 'page' : undefined}
                   /* Same hover pill as the footer: bone, the page's own
                      ground, on the bar's paper. */
-                  className="-my-2 whitespace-nowrap rounded-[10px] px-3 py-2 text-[14px] font-medium tracking-[-0.02em] text-ink/80 transition-colors hover:bg-bone hover:text-ink"
+                  className={`-my-2 whitespace-nowrap rounded-[10px] px-3 py-2 text-[14px] font-medium tracking-[-0.02em] transition-colors hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal ${route === item.href.slice(1) ? 'bg-bone text-ink' : 'text-ink/80'}`}
                 >
                   {item.label}
                 </a>
@@ -304,7 +348,7 @@ export default function Nav() {
             <LanguageMenu />
             <a
               href="/login"
-              className="hidden -my-2 whitespace-nowrap rounded-[10px] px-3 py-2 text-[14px] font-medium tracking-[-0.01em] text-ink/65 transition-colors hover:bg-bone hover:text-ink sm:inline-block"
+              className="hidden -my-2 whitespace-nowrap rounded-[10px] px-3 py-2 text-[14px] font-medium tracking-[-0.01em] text-ink/65 transition-colors hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal sm:inline-block"
             >
               登录
             </a>
@@ -317,7 +361,7 @@ export default function Nav() {
             >
               申请使用
             </a>
-            <MobileMenu />
+            <MobileMenu route={route} />
           </div>
         </div>
       </div>
