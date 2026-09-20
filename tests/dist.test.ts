@@ -28,6 +28,14 @@ test('every page has an HTML file and a Markdown twin', () => {
   }
 })
 
+test('the prerendered login language switch links to both locales', () => {
+  for (const path of ['login/index.html', 'zh/login/index.html']) {
+    const html = read(path)
+    assert.match(html, /href="\/login"/, `${path}: missing English login link`)
+    assert.match(html, /href="\/zh\/login"/, `${path}: missing Chinese login link`)
+  }
+})
+
 test('each Markdown twin names its source, its language and the other language', () => {
   for (const path of PAGES) {
     const md = read(markdownPathFor(path).slice(1))
