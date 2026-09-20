@@ -47,7 +47,7 @@ export default function LoginPage() {
   const { language } = useI18n()
 
   return (
-    <main className={`login-screen login-theme-${theme} flex min-h-screen flex-col items-center px-5 pb-10 pt-[clamp(64px,12vh,112px)]`}>
+    <main className={`login-screen login-theme-${theme} flex min-h-screen flex-col items-center justify-center px-5 py-10`}>
       <a href="/" className="login-logo" aria-label="Ola 首页">
         <OlaLogo className="h-8 w-auto" />
       </a>
