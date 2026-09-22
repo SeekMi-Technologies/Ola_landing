@@ -8,14 +8,14 @@ import { INTEGRATIONS, matchesIntegrationQuery } from '../src/pages/integrations
 const dist = join(import.meta.dirname, '..', 'dist')
 const read = (path: string) => readFileSync(join(dist, path), 'utf8')
 
-test('live integrations are not presented as coming soon', () => {
+test('Slack and Teams are presented as coming soon', () => {
   for (const name of ['Slack', 'Microsoft Teams']) {
     const integration = INTEGRATIONS.find((item) => item.name === name)
     assert.ok(integration, `${name} is missing from the catalogue`)
-    assert.ok(!integration.comingSoon, `${name} is live but marked coming soon`)
+    assert.ok(integration.comingSoon, `${name} must be marked coming soon`)
   }
-  assert.equal(INTEGRATIONS.filter((item) => !item.comingSoon).length, 7)
-  assert.equal(INTEGRATIONS.filter((item) => item.comingSoon).length, 8)
+  assert.equal(INTEGRATIONS.filter((item) => !item.comingSoon).length, 5)
+  assert.equal(INTEGRATIONS.filter((item) => item.comingSoon).length, 10)
 })
 
 test('integration statuses are localized in both prerendered pages', () => {

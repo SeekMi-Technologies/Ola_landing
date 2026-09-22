@@ -42,7 +42,7 @@ export default function Hero() {
                 not ch — the ch unit measures "0" and under-sizes CJK lines. */}
             <p className="t-subheading max-w-[540px] text-ink/65 text-pretty">
               主动干活的队友，就在你原本工作的地方 ——
-              飞书、Lark、WhatsApp、Slack、Teams。
+              飞书、Lark 和 WhatsApp。
             </p>
 
             {/* Points at the demo directly below rather than off the page, so
