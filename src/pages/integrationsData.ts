@@ -76,12 +76,13 @@ export const INTEGRATIONS: Integration[] = [
     blurb: '配对一次，语音和录音都能发',
     logo: '/logos/whatsapp.webp',
   },
-  { name: 'Slack', category: 'chat', blurb: '频道里 @ 他，结果回到频道', logo: '/logos/slack.webp' },
+  { name: 'Slack', category: 'chat', blurb: '频道里 @ 他，结果回到频道', logo: '/logos/slack.webp', comingSoon: true },
   {
     name: 'Microsoft Teams',
     category: 'chat',
     blurb: '和飞书里是同一个 Ola',
     logo: '/logos/microsoft-teams.webp',
+    comingSoon: true,
   },
   {
     name: 'GitHub',

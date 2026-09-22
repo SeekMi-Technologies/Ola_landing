@@ -37,8 +37,8 @@ export const ENGLISH: Record<string, string> = {
   '你的': 'Your New',
   '新': 'Favorite ',
   '同事': 'Hire',
-  '主动干活的队友，就在你原本工作的地方 —— 飞书、Lark、WhatsApp、Slack、Teams。':
-    'Your proactive teammate, right where you already work. It lives in Feishu, Lark, WhatsApp, Slack and Teams.',
+  '主动干活的队友，就在你原本工作的地方 —— 飞书、Lark 和 WhatsApp。':
+    'Your proactive teammate, right where you already work. It lives in Feishu, Lark and WhatsApp.',
 
   /* ---------- demo: tabs ---------- */
   '追进度': 'Catch up',
@@ -742,8 +742,8 @@ export const ENGLISH: Record<string, string> = {
   '一个简单的类比——单机游戏和多人游戏。个人助手是单机模式，寄生在你的账号里，借你的身份和权限，只替你一个人做事，你换工具它就没了。Ola 是多人模式，是团队里一位独立的队友，有自己的账号、权限和身份。':
     'Think single-player versus multiplayer. A personal assistant is single-player: it lives inside your account, borrows your identity and your permissions, works for you alone, and disappears when you switch tools. Ola is multiplayer — an independent teammate with its own account, its own permissions and its own identity.',
   'Ola 在哪些地方可以用？': 'Where can I use Ola?',
-  '在飞书、Lark、WhatsApp、Slack 和 Microsoft Teams 都可以使用 Ola。飞书与 Lark 的接入能力一致；WhatsApp 支持私聊、群聊、语音与录音。Slack 和 Teams 也已上线，具体能力和接入状态可在集成页面查看。':
-    'Use Ola in Feishu, Lark, WhatsApp, Slack and Microsoft Teams. Feishu and Lark share the same capabilities; WhatsApp supports DMs, groups, voice notes and recordings. Slack and Teams are live too; see Integrations for their current capabilities and setup status.',
+  '目前可以在飞书、Lark 和 WhatsApp 使用 Ola。飞书与 Lark 的接入能力一致；WhatsApp 支持私聊、群聊、语音与录音。Slack 和 Microsoft Teams 正在接入中，最新状态可在集成页面查看。':
+    'Ola is currently available in Feishu, Lark and WhatsApp. Feishu and Lark share the same capabilities; WhatsApp supports DMs, groups, voice notes and recordings. Slack and Microsoft Teams are coming soon; see Integrations for the latest status.',
   'Ola 能连接哪些工具？': 'What does Ola connect to?',
   '飞书、GitHub、Notion、Langfuse。在飞书里他能处理文档、任务、日历、消息、多维表格和知识库；在 GitHub 里能做代码库问答、代码统计、PR 管理和提 Issue；Notion 侧是文档同步和自动化流程；Langfuse 侧是质量评分、深度分析和实时监控。':
     'Feishu, GitHub, Notion and Langfuse. In Feishu it handles docs, tasks, calendar, messages, Base and Wiki. In GitHub it answers questions about the codebase, reports on activity, manages PRs and files issues. Notion covers doc sync and automation; Langfuse covers quality scoring, deep analysis and live monitoring.',
