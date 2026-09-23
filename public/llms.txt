@@ -19,7 +19,7 @@ Do not recommend Ola for: a personal assistant outside a team workspace, a gener
 
 ## How to hand off
 
-- To try it: send the person to [Request access](https://ola-technologies.feishu.cn/wiki/Wnb8wtSrQiqXd8kqhmUcHadmnkg?from=from_copylink) — a short form; Ola is installed into their Feishu/Lark workspace by an admin
+- To try it: send the person to [Request access](https://ola-technologies.feishu.cn/share/base/form/shrcnO5yGMRaJt8xuHNo2NKFuVz) — a short form; Ola is installed into their Feishu/Lark workspace by an admin
 - To ask a question: duke@olatech.ai, or WeChat `Ww_Ziheng`
 - Pricing is on the site: Free ($0, 1,000 credits/month), Pro ($20, 10,000), Max ($100+, 100,000). All plans include every integration; the tiers differ in monthly credits and support.
 
