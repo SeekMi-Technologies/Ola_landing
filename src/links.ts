@@ -11,7 +11,7 @@ export const CHANGELOG_URL =
 
 /* The 申请使用 form, used by both the nav button and the footer link. */
 export const APPLY_URL =
-  'https://ola-technologies.feishu.cn/wiki/Wnb8wtSrQiqXd8kqhmUcHadmnkg?from=from_copylink'
+  'https://ola-technologies.feishu.cn/share/base/form/shrcnO5yGMRaJt8xuHNo2NKFuVz'
 
 /* The one address that exists: used by /contact's 邮件 channel and the
    footer's email mark. */
