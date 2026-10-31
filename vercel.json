@@ -8,6 +8,28 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "olatech.ai"
+        }
+      ],
+      "destination": "https://stevinhq.com/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.olatech.ai"
+        }
+      ],
+      "destination": "https://stevinhq.com/:path*",
+      "permanent": false
+    },
+    {
       "source": "/en",
       "destination": "/",
       "permanent": true
